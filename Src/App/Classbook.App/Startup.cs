@@ -14,6 +14,7 @@ namespace Classbook.App
     using Classbook.Data;
     using Classbook.Data.Models;
     using ElectronNET.API;
+
     using System.Threading.Tasks;
 
     public class Startup
@@ -32,7 +33,7 @@ namespace Classbook.App
             services.AddDbContext<ClassbookDbContext>(options =>
                 options.UseSqlite(
                     Configuration.GetConnectionString("DefaultConnection")));
-            services.AddDefaultIdentity<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = false)
+            services.AddDefaultIdentity<ApplicationUser>(options => IdentityOptionsProvider.GetIdentityOptions(options))
                 .AddRoles<ApplicationRole>()
                 .AddEntityFrameworkStores<ClassbookDbContext>();
             services.AddRazorPages();
@@ -78,7 +79,10 @@ namespace Classbook.App
                 endpoints.MapFallbackToPage("/_Host");
             });
 
-            ElectronBootstrap();
+            if (HybridSupport.IsElectronActive)
+            {
+                ElectronBootstrap();
+            }
         }
         
         private void ElectronBootstrap()
