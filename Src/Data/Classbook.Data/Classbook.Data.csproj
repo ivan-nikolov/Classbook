@@ -20,6 +20,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\Classbook.Data.Common\Classbook.Data.Common.csproj" />
+    <ProjectReference Include="..\Classbook.Data.Common\Classbook.Data.Common.csproj" />
     <ProjectReference Include="..\Classbook.Data.Models\Classbook.Data.Models.csproj" />
   </ItemGroup>
 
