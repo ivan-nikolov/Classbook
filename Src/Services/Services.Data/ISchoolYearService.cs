@@ -4,19 +4,20 @@
     using System.Threading.Tasks;
 
     using Classbook.Data.Models;
+    using Classbook.Services.Models;
 
     public interface ISchoolYearService
     {
         Task CreateAsync(string year);
 
-        SchoolYear GetById(int id);
+        Task<<SchoolYearDto> GetById(int id);
 
         IEnumerable<SchoolYear> All();
 
-        Task Archive();
+        Task Archive(int id);
 
-        Task Delete();
+        Task Delete(int id);
 
-        Task Update();
+        Task Update(int id, SchoolYearDto schoolYear);
     }
 }

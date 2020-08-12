@@ -13,6 +13,11 @@
 
     public class ClassbookDbContext : IdentityDbContext<ApplicationUser, ApplicationRole, string>
     {
+        public ClassbookDbContext()
+        {
+
+        }
+
         public ClassbookDbContext(DbContextOptions<ClassbookDbContext> options)
             : base(options)
         {

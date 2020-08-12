@@ -5,9 +5,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\Data\Classbook.Data.Common\Classbook.Data.Common.csproj" />
     <ProjectReference Include="..\..\Data\Classbook.Data.Models\Classbook.Data.Models.csproj" />
-    <ProjectReference Include="..\..\Data\Classbook.Data\Classbook.Data.csproj" />
   </ItemGroup>
 
 </Project>

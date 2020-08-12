@@ -1,0 +1,13 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\Data\Classbook.Data.Common\Classbook.Data.Common.csproj" />
+    <ProjectReference Include="..\Services.Data\Services.Data.csproj" />
+  </ItemGroup>
+
+</Project>

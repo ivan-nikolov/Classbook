@@ -1,8 +1,12 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 using Classbook.Data;
 using Classbook.Data.Models;
+using Classbook.Services.Models;
+
+using Microsoft.EntityFrameworkCore;
 
 namespace Services.Data
 {
@@ -17,32 +21,49 @@ namespace Services.Data
 
         public IEnumerable<SchoolYear> All()
         {
-            throw new System.NotImplementedException();
+            return this.context.SchoolYears.ToList();
         }
 
-        public Task Archive()
+        public async Task Archive(int id)
         {
-            throw new System.NotImplementedException();
+            var year = await this.context.SchoolYears.FirstOrDefaultAsync(y => y.Id == id);
+            year.IsDeleted = true;
         }
 
-        public Task CreateAsync(string year)
+        public async Task CreateAsync(string year)
         {
-            throw new System.NotImplementedException();
+            var yearToSave = new SchoolYear()
+            {
+                Year = year,
+            };
+
+            await this.context.SchoolYears.AddAsync(yearToSave);
+            await this.context.SaveChangesAsync();
         }
 
-        public Task Delete()
+        public async Task Delete(int id)
         {
-            throw new System.NotImplementedException();
+            var model = await this.context.SchoolYears.FirstOrDefaultAsync(y => y.Id == id);
+            this.context.Remove(model);
+            await this.context.SaveChangesAsync();
         }
 
-        public SchoolYear GetById(int id)
+        public async Task<SchoolYearDto> GetById(int id)
         {
-            throw new System.NotImplementedException();
+            var model =  await this.context.SchoolYears.FirstOrDefaultAsync(y => y.Id == id);
+            return new SchoolYearDto()
+            {
+                Id = model.Id,
+                Year = model.Year,
+            };
         }
 
-        public Task Update()
+        public async Task Update(int id, SchoolYearDto schoolYear)
         {
-            throw new System.NotImplementedException();
+            var model = await this.context.SchoolYears.FirstOrDefaultAsync(y => y.Id == id);
+            model.Year = schoolYear.Year;
+
+            await context.SaveChangesAsync();
         }
     }
 }
