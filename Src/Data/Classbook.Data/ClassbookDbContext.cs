@@ -18,6 +18,18 @@
         {
         }
 
+        public DbSet<Grade> Grades { get; set; }
+
+        public DbSet<GradeClass> GradeClasses { get; set; }
+
+        public DbSet<Mark> Marks { get; set; }
+
+        public DbSet<SchoolYear> SchoolYears { get; set; }
+
+        public DbSet<Student> Students { get; set; }
+
+        public DbSet<Subject> Subjects { get; set; }
+
         public override int SaveChanges() => this.SaveChanges(true);
 
         public override int SaveChanges(bool acceptAllChangesOnSuccess)
@@ -40,6 +52,8 @@
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
+
+            builder.ApplyConfigurationsFromAssembly(typeof(ClassbookDbContext).Assembly);
 
             builder.Entity<ApplicationUser>()
                 .HasMany(e => e.Claims)

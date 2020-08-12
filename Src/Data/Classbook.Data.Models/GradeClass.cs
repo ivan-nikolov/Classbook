@@ -8,8 +8,7 @@
     {
         public string Name { get; set; }
 
-        public int GradeId { get; set; }
-        public Grade Grade { get; set; }
+        public ICollection<GradeGradeClass> Grades { get; set; } = new HashSet<GradeGradeClass>();
 
         public ICollection<Student> Students { get; set; } = new HashSet<Student>();
     }

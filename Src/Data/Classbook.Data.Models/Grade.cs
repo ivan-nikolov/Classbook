@@ -11,6 +11,8 @@
         public int SchoolYearId { get; set; }
         public SchoolYear SchoolYear { get; set; }
 
-        public ICollection<GradeClass> Classes { get; set; } = new HashSet<GradeClass>();
+        public ICollection<Mark> Marks { get; set; } = new HashSet<Mark>();
+
+        public ICollection<GradeGradeClass> Classes { get; set; } = new HashSet<GradeGradeClass>();
     }
 }
