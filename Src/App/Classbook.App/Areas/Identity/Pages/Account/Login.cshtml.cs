@@ -44,8 +44,8 @@ namespace Classbook.App.Areas.Identity.Pages.Account
         public class InputModel
         {
             [Required]
-            [Display(Name = "Потребителско име")]
-            public string Username { get; set; }
+            [Display(Name = "Email")]
+            public string Email { get; set; }
 
             [Required]
             [DataType(DataType.Password)]
@@ -98,7 +98,7 @@ namespace Classbook.App.Areas.Identity.Pages.Account
                 }
                 else
                 {
-                    ModelState.AddModelError(string.Empty, "Невалиден опит за вписване.");
+                    ModelState.AddModelError(string.Empty, "Неуспешен опит за вписване.");
                     return Page();
                 }
             }

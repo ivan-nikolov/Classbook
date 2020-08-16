@@ -2,11 +2,11 @@
     <Authorized>
         <a href="Identity/Account/Manage">Здравей, @context.User.Identity.Name!</a>
         <form method="post" action="Identity/Account/LogOut">
-            <button type="submit" class="nav-link btn btn-link">Изход</button>
+            <button type="submit" class="nav-link btn btn-link">Отписване</button>
         </form>
     </Authorized>
     <NotAuthorized>
         <a href="Identity/Account/Register">Регистриране</a>
-        <a href="Identity/Account/Login">Вписване</a>
+        <a href="/Login">Вписване</a>
     </NotAuthorized>
 </AuthorizeView>

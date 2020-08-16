@@ -1,18 +1,28 @@
 ﻿@inherits LayoutComponentBase
-
-<div class="sidebar">
-    <NavMenu />
-</div>
-
-<div class="main">
-    <div class="top-row px-4 auth">
-        <LoginDisplay />
-        <NavLink class="nav-link" href="About">
-            About
-        </NavLink>
+@using ElectronNET.API
+<CascadingAuthenticationState>
+    <div class="sidebar">
+        <NavMenu />
     </div>
 
-    <div class="content px-4">
-        @Body
+    <div class="main">
+        <div class="top-row px-4 auth">
+            <LoginDisplay />
+            <NavLink class="nav-link" href="About">
+                Относно
+            </NavLink>
+            <button @onclick="this.OnExit"><span class="oi oi-x"></span></button>
+        </div>
+
+        <div class="content px-4">
+            @Body
+        </div>
     </div>
-</div>
+</CascadingAuthenticationState>
+
+@code {
+    private void OnExit()
+    {
+        Electron.WindowManager.BrowserWindows.First().Close();
+    }
+}

@@ -17,6 +17,7 @@ namespace Classbook.App
     using ElectronNET.API;
 
     using System.Threading.Tasks;
+    using System;
 
     public class Startup
     {
@@ -34,9 +35,22 @@ namespace Classbook.App
             services.AddDbContext<ClassbookDbContext>(options =>
                 options.UseSqlite(
                     Configuration.GetConnectionString("DefaultConnection")));
+
             services.AddDefaultIdentity<ApplicationUser>(options => IdentityOptionsProvider.GetIdentityOptions(options))
                 .AddRoles<ApplicationRole>()
                 .AddEntityFrameworkStores<ClassbookDbContext>();
+
+            services.ConfigureApplicationCookie(options =>
+            {
+                // Cookie settings
+                options.Cookie.HttpOnly = true;
+                options.ExpireTimeSpan = TimeSpan.FromMinutes(5);
+
+                options.LoginPath = "/Account/Login";
+                options.AccessDeniedPath = "/Account/AccessDenied";
+                options.SlidingExpiration = true;
+            });
+
             services.AddRazorPages();
             services.AddServerSideBlazor();
 
@@ -70,6 +84,7 @@ namespace Classbook.App
 
             app.UseHttpsRedirection();
             app.UseStaticFiles();
+            app.UseCookiePolicy();
 
             app.UseRouting();
 

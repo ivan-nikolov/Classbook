@@ -9,7 +9,7 @@
   "environment": "Production",
   "build": {
     "appId": "com.Classbook.App.app",
-    "productName": "Classbook.App",
+    "productName": "Дневник",
     "copyright": "Copyright © 2020",
     "buildVersion": "1.0.0",
     "compression": "maximum",
