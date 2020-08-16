@@ -8,7 +8,7 @@ using Classbook.Services.Models;
 
 using Microsoft.EntityFrameworkCore;
 
-namespace Services.Data
+namespace Classbook.Services.Data
 {
     public class SchoolYearService : ISchoolYearService
     {
@@ -19,9 +19,14 @@ namespace Services.Data
             this.context = context;
         }
 
-        public IEnumerable<SchoolYear> All()
+        public async Task<IEnumerable<SchoolYearDto>> All()
         {
-            return this.context.SchoolYears.ToList();
+            return await this.context.SchoolYears.Select(x => new SchoolYearDto() 
+            {
+                Id = x.Id,
+                Year = x.Year
+            })
+            .ToListAsync();
         }
 
         public async Task Archive(int id)

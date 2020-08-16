@@ -1,4 +1,4 @@
-﻿namespace Services.Data
+﻿namespace Classbook.Services.Data
 {
     using System.Collections.Generic;
     using System.Threading.Tasks;
@@ -10,9 +10,9 @@
     {
         Task CreateAsync(string year);
 
-        Task<<SchoolYearDto> GetById(int id);
+        Task<SchoolYearDto> GetById(int id);
 
-        IEnumerable<SchoolYear> All();
+        Task<IEnumerable<SchoolYearDto>> All();
 
         Task Archive(int id);
 

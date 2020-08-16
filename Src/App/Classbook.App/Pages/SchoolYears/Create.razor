@@ -1,0 +1,27 @@
+﻿@page "/years/craete"
+@inject Classbook.Services.Data.ISchoolYearService service
+@using Classbook.App.Models.SchoolYear
+@inject NavigationManager NavManager
+@attribute [Authorize]
+
+<EditForm Model="input" OnValidSubmit="HandleValidSubmit">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+    <p>
+        <label for="year">
+            Учебна година:
+        </label>
+        <InputText id="year" name="year" @bind-Value="input.Year" />
+    </p>
+    <button class="btn btn-success" type="submit">Добави</button>
+</EditForm>
+
+@code {
+    private SchoolYearInputModel input = new SchoolYearInputModel();
+
+    private async Task HandleValidSubmit()
+    {
+        await service.CreateAsync(input.Year);
+        NavManager.NavigateTo("/years/all", true);
+    }
+}

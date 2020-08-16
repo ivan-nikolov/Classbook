@@ -13,6 +13,7 @@ namespace Classbook.App
     using Classbook.App.Data;
     using Classbook.Data;
     using Classbook.Data.Models;
+    using Classbook.Services.Data;
     using ElectronNET.API;
 
     using System.Threading.Tasks;
@@ -38,6 +39,9 @@ namespace Classbook.App
                 .AddEntityFrameworkStores<ClassbookDbContext>();
             services.AddRazorPages();
             services.AddServerSideBlazor();
+
+            services.AddTransient<ISchoolYearService, SchoolYearService>();
+
             services.AddScoped<AuthenticationStateProvider, RevalidatingIdentityAuthenticationStateProvider<IdentityUser>>();
             services.AddSingleton<WeatherForecastService>();
         }

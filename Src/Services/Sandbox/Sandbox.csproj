@@ -7,7 +7,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\Data\Classbook.Data.Common\Classbook.Data.Common.csproj" />
-    <ProjectReference Include="..\Services.Data\Services.Data.csproj" />
+    <ProjectReference Include="..\Services.Data\Classbook.Services.Data.csproj" />
   </ItemGroup>
 
 </Project>

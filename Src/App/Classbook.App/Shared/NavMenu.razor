@@ -1,5 +1,6 @@
-﻿<div class="top-row pl-4 navbar navbar-dark">
-    <a class="navbar-brand" href="">Classbook.App</a>
+﻿
+<div class="top-row pl-4 navbar navbar-dark">
+    <a class="navbar-brand" href="">Дневник</a>
     <button class="navbar-toggler" @onclick="ToggleNavMenu">
         <span class="navbar-toggler-icon"></span>
     </button>
@@ -7,7 +8,7 @@
 
 <div class="@NavMenuCssClass" @onclick="ToggleNavMenu">
     <ul class="nav flex-column">
-        <li class="nav-item px-3">
+        @*<li class="nav-item px-3">
             <NavLink class="nav-link" href="" Match="NavLinkMatch.All">
                 <span class="oi oi-home" aria-hidden="true"></span> Home
             </NavLink>
@@ -21,17 +22,58 @@
             <NavLink class="nav-link" href="fetchdata">
                 <span class="oi oi-list-rich" aria-hidden="true"></span> Fetch data
             </NavLink>
-        </li>
+        </li>*@
+        <AuthorizeView>
+            <Authorized>
+                <li class="nav-item px-3">
+                    <NavLink class="nav-link" href="" @onclick="this.ToggleSubMenu">
+                        <span class=@this.menuIcon aria-hidden="true"></span> Учебни години
+                    </NavLink>
+                    @if (collapseSubMenu)
+                    {
+                <ul class="nav flex-column">
+
+                    <li class="nav-item px-3">
+                        <NavLink class="nav-link" href="/years/all">
+                            <span class="oi oi-list-rich" aria-hidden="true"></span> Всички
+                        </NavLink>
+                    </li>
+
+                    <li class="nav-item px-3">
+                        <NavLink class="nav-link" href="/years/craete">
+                            <span class="oi oi-plus" aria-hidden="true"></span> Добавяне
+                        </NavLink>
+                    </li>
+                </ul>
+                    }
+                </li>
+            </Authorized>
+        </AuthorizeView>
     </ul>
 </div>
 
 @code {
     private bool collapseNavMenu = true;
+    private bool collapseSubMenu;
+    private string menuIcon = "oi oi-home";
 
     private string NavMenuCssClass => collapseNavMenu ? "collapse" : null;
 
     private void ToggleNavMenu()
     {
         collapseNavMenu = !collapseNavMenu;
+    }
+
+    private void ToggleSubMenu()
+    {
+        this.collapseSubMenu = !this.collapseSubMenu;
+        if (collapseSubMenu)
+        {
+            this.menuIcon = "oi oi-arrow-circle-bottom";
+        }
+        else
+        {
+            this.menuIcon = "oi oi-home";
+        }
     }
 }

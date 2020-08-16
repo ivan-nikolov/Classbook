@@ -1,0 +1,35 @@
+﻿@page "/years/all"
+@inject Classbook.Services.Data.ISchoolYearService service
+@using Classbook.App.Models.SchoolYear
+
+@if(this.years == null)
+{
+    <h4>Зареждане...</h4>
+}
+else
+{
+<ul class="list-group">
+    @foreach (var year in this.years)
+    {
+        <li class="list-group-item">
+            <a class="nav-link" href="/years/details/@year.Id">
+                <span class="oi oi-calendar" aria-hidden="true"></span> @year.Year
+            </a>
+        </li>
+    }
+</ul>
+}
+
+@code {
+    private List<SchoolYearViewModel> years;
+
+    protected override async Task OnInitializedAsync()
+    {
+        years = (await service.All()).Select(x => new SchoolYearViewModel()
+        {
+            Id = x.Id,
+            Year = x.Year
+        })
+        .ToList();
+    }
+}

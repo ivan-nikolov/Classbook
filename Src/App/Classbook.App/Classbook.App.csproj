@@ -9,10 +9,14 @@
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="3.1.6" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="3.1.6" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="3.1.6" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="3.1.6" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="3.1.6" />
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="3.1.4" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\Data\Classbook.Data\Classbook.Data.csproj" />
+    <ProjectReference Include="..\..\Services\Classbook.Services.Data\Classbook.Services.Data.csproj" />
+    <ProjectReference Include="..\Classbook.App.Models\Classbook.App.Models.csproj" />
   </ItemGroup>
   <ItemGroup>
     <Content Update="electron.manifest.json">
