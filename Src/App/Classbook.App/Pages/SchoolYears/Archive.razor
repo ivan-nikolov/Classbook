@@ -1,0 +1,72 @@
+﻿@page "/years/archive"
+@using Classbook.App.Models.SchoolYear
+@inject Classbook.Services.Data.ISchoolYearService yearsService
+
+@if (this.years == null)
+{
+    <p>Зареждам...</p>
+}
+else if (this.years.Count == 0)
+{
+    <h4>Няма учебни години в архива.</h4>
+}
+else
+{
+    <ul class="list-group">
+        @foreach (var year in this.years)
+        {
+            <li class="list-group-item">
+                <div class="d-flex justify-content-between">
+                    <h4>@year.Year</h4>
+                    <div>
+                        <button class="btn btn-outline-info" @onclick="@((e) => this.OnRestore(year.Id))">Възстанови</button>
+                        <button class="btn btn-outline-danger" @onclick="@((e) => this.OnDelete(year.Id))">Изтрий</button>
+                    </div>
+                </div>
+            </li>
+        }
+    </ul>
+}
+
+@code {
+    private List<SchoolYearViewModel> years;
+
+    [CascadingParameter]
+    private Task<AuthenticationState> authenticationStateTask { get; set; }
+
+    private ClaimsPrincipal user;
+
+    private BrowserWindow window;
+
+    protected override async Task OnInitializedAsync()
+    {
+        this.user = (await this.authenticationStateTask).User;
+        if (HybridSupport.IsElectronActive)
+        {
+            this.window = Electron.WindowManager.BrowserWindows.First();
+        }
+        years = (await this.yearsService.AllByUserId(user.GetId(), true))
+            .Select(x => new SchoolYearViewModel()
+            {
+                Id = x.Id,
+                Year = x.Year
+            })
+            .ToList();
+
+        await base.OnInitializedAsync();
+    }
+
+    private async Task OnDelete(int id)
+    {
+        await this.yearsService.Delete(id);
+        this.window?.Reload();
+        this.StateHasChanged();
+    }
+
+    private async Task OnRestore(int id)
+    {
+        await this.yearsService.Restore(id);
+        this.window?.Reload();
+        this.StateHasChanged();
+    }
+}

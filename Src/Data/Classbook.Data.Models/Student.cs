@@ -13,7 +13,7 @@
 
         public string LastName { get; set; }
 
-        [Range(1, 40)]
+        [Range(1, 50)]
         public int NumberInClass { get; set; }
 
         public string GradeClassId { get; set; }

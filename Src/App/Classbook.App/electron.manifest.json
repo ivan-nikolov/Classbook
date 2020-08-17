@@ -3,7 +3,7 @@
   "splashscreen": {
     "imageFile": ""
   },
-  "name": "Classbook.App",
+  "name": "Classbook",
   "author": "",
   "singleInstance": false,
   "environment": "Production",

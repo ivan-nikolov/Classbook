@@ -16,14 +16,9 @@
                 .HasForeignKey(m => m.StudentId)
                 .OnDelete(DeleteBehavior.Restrict);
 
-            builder.HasOne(m => m.Subject)
-                .WithMany(s => s.Marks)
-                .HasForeignKey(m => m.SubjectId)
-                .OnDelete(DeleteBehavior.Restrict);
-
-            builder.HasOne(m => m.Grade)
-                .WithMany(sy => sy.Marks)
-                .HasForeignKey(m => m.GradeId)
+            builder.HasOne(m => m.GradeSubject)
+                .WithMany()
+                .HasForeignKey(m => new { m.GradeId, m.SubjectId })
                 .OnDelete(DeleteBehavior.Restrict);
         }
     }

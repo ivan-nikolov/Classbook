@@ -1,7 +1,5 @@
 ﻿namespace Classbook.Data.Configurations
 {
-    using System.Security.Cryptography.X509Certificates;
-
     using Classbook.Data.Models;
 
     using Microsoft.EntityFrameworkCore;
@@ -17,6 +15,11 @@
                 .HasMaxLength(50)
                 .IsRequired(true)
                 .IsUnicode(true);
+
+            builder.HasOne(sy => sy.User)
+                .WithMany(u => u.SchoolYears)
+                .HasForeignKey(sy => sy.UserId)
+                .OnDelete(DeleteBehavior.Restrict);
         }
     }
 }

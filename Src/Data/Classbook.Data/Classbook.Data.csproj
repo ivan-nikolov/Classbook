@@ -5,6 +5,17 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Migrations\20200809114655_InitialCreate.cs" />
+    <Compile Remove="Migrations\20200809114655_InitialCreate.Designer.cs" />
+    <Compile Remove="Migrations\20200812121315_AddInitialEntities.cs" />
+    <Compile Remove="Migrations\20200812121315_AddInitialEntities.Designer.cs" />
+    <Compile Remove="Migrations\20200817090812_AddSchoolYearToUserRelation.cs" />
+    <Compile Remove="Migrations\20200817090812_AddSchoolYearToUserRelation.Designer.cs" />
+    <Compile Remove="Migrations\20200817092631_InitialCreate.cs" />
+    <Compile Remove="Migrations\20200817092631_InitialCreate.Designer.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="3.1.6" />
     <PackageReference Include="Microsoft.Data.Sqlite.Core" Version="3.1.6" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="3.1.6">

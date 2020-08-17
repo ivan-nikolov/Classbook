@@ -1,35 +1,65 @@
-﻿@page "/years/all"
-@inject Classbook.Services.Data.ISchoolYearService service
+﻿@page "/"
+@page "/years/all"
+@inject Classbook.Services.Data.ISchoolYearService yearsService
 @using Classbook.App.Models.SchoolYear
 
-@if(this.years == null)
+@if (this.years == null)
 {
     <h4>Зареждане...</h4>
 }
+else if(this.years.Count == 0){
+    <h4>Няма регистрирани учебни години.</h4>
+    <NavLink class="btn btn-outline-primary" href="/years/create">
+        Създаване
+    </NavLink>
+}
 else
 {
-<ul class="list-group">
-    @foreach (var year in this.years)
-    {
-        <li class="list-group-item">
-            <a class="nav-link" href="/years/details/@year.Id">
-                <span class="oi oi-calendar" aria-hidden="true"></span> @year.Year
-            </a>
-        </li>
-    }
-</ul>
+    <ul class="list-group">
+        @foreach (var year in this.years)
+        {
+            <li class="list-group-item">
+                <div class="d-flex justify-content-between">
+                    <a class="nav-link" href="/years/details/@year.Id">
+                        <span class="oi oi-calendar" aria-hidden="true"></span> @year.Year
+                    </a>
+                    <div>
+                        <button class="btn btn-outline-info">Редактирай</button>
+                        <button class="btn btn-outline-warning" @onclick="@((e) => this.OnArchive(year.Id))">Архивирай</button>
+                    </div>
+                </div>
+            </li>
+        }
+    </ul>
 }
 
 @code {
     private List<SchoolYearViewModel> years;
 
+    [CascadingParameter]
+    private Task<AuthenticationState> authenticationStateTask { get; set; }
+
+    private ClaimsPrincipal user;
+
     protected override async Task OnInitializedAsync()
     {
-        years = (await service.All()).Select(x => new SchoolYearViewModel()
+        this.user = (await this.authenticationStateTask).User;
+
+        years = (await yearsService.AllByUserId(user.GetId())).Select(x => new SchoolYearViewModel()
         {
             Id = x.Id,
             Year = x.Year
         })
         .ToList();
+    }
+
+    private async Task OnArchive(int id)
+    {
+        await this.yearsService.Archive(id);
+        if (HybridSupport.IsElectronActive)
+        {
+            Electron.WindowManager.BrowserWindows.First().Reload();
+        }
+        this.StateHasChanged();
     }
 }

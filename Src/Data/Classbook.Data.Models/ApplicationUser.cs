@@ -31,6 +31,8 @@
 
         public virtual ICollection<IdentityUserLogin<string>> Logins { get; set; }
 
+        public ICollection<SchoolYear> SchoolYears { get; set; } = new HashSet<SchoolYear>();
+
         public string FirstName { get; set; }
 
         public string LastName { get; set; }

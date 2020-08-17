@@ -1,4 +1,4 @@
-﻿@page "/years/craete"
+﻿@page "/years/create"
 @inject Classbook.Services.Data.ISchoolYearService service
 @using Classbook.App.Models.SchoolYear
 @inject NavigationManager NavManager
@@ -19,9 +19,20 @@
 @code {
     private SchoolYearInputModel input = new SchoolYearInputModel();
 
+    [CascadingParameter]
+    private Task<AuthenticationState> authenticationStateTask { get; set; }
+
+    private ClaimsPrincipal user;
+
+    protected override async Task OnInitializedAsync()
+    {
+        this.user = (await this.authenticationStateTask).User;
+        await base.OnInitializedAsync();
+    }
+
     private async Task HandleValidSubmit()
     {
-        await service.CreateAsync(input.Year);
+        await service.CreateAsync(input.Year, this.user.GetId());
         NavManager.NavigateTo("/years/all", true);
     }
 }

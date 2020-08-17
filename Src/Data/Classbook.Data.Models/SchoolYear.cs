@@ -8,6 +8,9 @@
     {
         public string Year { get; set; }
 
+        public string UserId { get; set; }
+        public ApplicationUser User { get; set; }
+
         public ICollection<Grade> Grades { get; set; } = new HashSet<Grade>();
     }
 }

@@ -210,6 +210,21 @@ namespace Classbook.Data.Migrations
                     b.ToTable("GradeGradeClass");
                 });
 
+            modelBuilder.Entity("Classbook.Data.Models.GradeSubject", b =>
+                {
+                    b.Property<int>("GradeId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("SubjectId")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("GradeId", "SubjectId");
+
+                    b.HasIndex("SubjectId");
+
+                    b.ToTable("GradeSubject");
+                });
+
             modelBuilder.Entity("Classbook.Data.Models.Mark", b =>
                 {
                     b.Property<int>("Id")
@@ -242,11 +257,11 @@ namespace Classbook.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("GradeId");
-
                     b.HasIndex("StudentId");
 
                     b.HasIndex("SubjectId");
+
+                    b.HasIndex("GradeId", "SubjectId");
 
                     b.ToTable("Marks");
                 });
@@ -306,6 +321,9 @@ namespace Classbook.Data.Migrations
                     b.Property<DateTime?>("ModifiedOn")
                         .HasColumnType("TEXT");
 
+                    b.Property<string>("UserId")
+                        .HasColumnType("TEXT");
+
                     b.Property<string>("Year")
                         .IsRequired()
                         .HasColumnType("TEXT")
@@ -313,6 +331,8 @@ namespace Classbook.Data.Migrations
                         .IsUnicode(true);
 
                     b.HasKey("Id");
+
+                    b.HasIndex("UserId");
 
                     b.ToTable("SchoolYears");
                 });
@@ -524,22 +544,37 @@ namespace Classbook.Data.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Classbook.Data.Models.Mark", b =>
+            modelBuilder.Entity("Classbook.Data.Models.GradeSubject", b =>
                 {
                     b.HasOne("Classbook.Data.Models.Grade", "Grade")
-                        .WithMany("Marks")
+                        .WithMany("Subjects")
                         .HasForeignKey("GradeId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
+                    b.HasOne("Classbook.Data.Models.Subject", "Subject")
+                        .WithMany("Grades")
+                        .HasForeignKey("SubjectId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Classbook.Data.Models.Mark", b =>
+                {
                     b.HasOne("Classbook.Data.Models.Student", "Student")
                         .WithMany("Marks")
                         .HasForeignKey("StudentId")
                         .OnDelete(DeleteBehavior.Restrict);
 
-                    b.HasOne("Classbook.Data.Models.Subject", "Subject")
+                    b.HasOne("Classbook.Data.Models.Subject", null)
                         .WithMany("Marks")
                         .HasForeignKey("SubjectId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Classbook.Data.Models.GradeSubject", "GradeSubject")
+                        .WithMany()
+                        .HasForeignKey("GradeId", "SubjectId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
                 });
@@ -554,6 +589,14 @@ namespace Classbook.Data.Migrations
                     b.HasOne("Classbook.Data.Models.Student", "Student")
                         .WithMany("Notes")
                         .HasForeignKey("StudentId")
+                        .OnDelete(DeleteBehavior.Restrict);
+                });
+
+            modelBuilder.Entity("Classbook.Data.Models.SchoolYear", b =>
+                {
+                    b.HasOne("Classbook.Data.Models.ApplicationUser", "User")
+                        .WithMany("SchoolYears")
+                        .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Restrict);
                 });
 
