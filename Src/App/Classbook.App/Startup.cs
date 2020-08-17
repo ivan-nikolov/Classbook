@@ -55,6 +55,7 @@ namespace Classbook.App
             services.AddServerSideBlazor();
 
             services.AddTransient<ISchoolYearService, SchoolYearService>();
+            services.AddTransient<IGradeService, GradeService>();
 
             services.AddScoped<AuthenticationStateProvider, RevalidatingIdentityAuthenticationStateProvider<IdentityUser>>();
             services.AddSingleton<WeatherForecastService>();
