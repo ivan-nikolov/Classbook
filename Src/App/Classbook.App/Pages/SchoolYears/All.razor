@@ -56,10 +56,7 @@ else
     private async Task OnArchive(int id)
     {
         await this.yearsService.Archive(id);
-        if (HybridSupport.IsElectronActive)
-        {
-            Electron.WindowManager.BrowserWindows.First().Reload();
-        }
+        ReloadWindow();
         this.StateHasChanged();
     }
 }

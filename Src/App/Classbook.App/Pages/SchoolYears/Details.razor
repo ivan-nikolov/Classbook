@@ -1,0 +1,56 @@
+﻿@page "/years/details/{Id:int}"
+@using Classbook.App.Models.SchoolYear;
+@inject Classbook.Services.Data.ISchoolYearService yearsService;
+
+@if (!this.yearExists)
+{
+    <p>Търсената година не е намерена.</p>
+}
+else
+{
+    <h4>@this.year.Year</h4>
+    @if (this.year.Grades.Count == 0)
+    {
+        <p>Няма открити класове за текущата година.</p>
+    }
+    else
+    {
+        <ul>
+            @foreach (var grade in this.year.Grades)
+            {
+                <li><a class="nav-link" href="/grades/details/@grade.Id">@grade.GradeNumber</a></li>
+            }
+        </ul>
+    }
+
+    <NavLink class="btn btn-outline-info" href="/grades/create">Добави клас</NavLink>
+}
+
+@code {
+    [Parameter]
+    public int Id { get; set; }
+
+    private bool yearExists = false;
+
+    private SchoolYearDetailsViewModel year;
+
+    protected override async Task OnInitializedAsync()
+    {
+        var yearDto = await this.yearsService.GetById(this.Id);
+        this.year = new SchoolYearDetailsViewModel()
+        {
+            Id = yearDto.Id,
+            Year = yearDto.Year,
+            Grades = yearDto.Grades.Select(y => new YearDetailsGradeViewModel()
+            {
+                Id = y.Id,
+                GradeNumber = y.GradeNuber,
+                SchoolYearId = yearDto.Id
+            }).ToList()
+        };
+
+        this.yearExists = this.year != null;
+
+        await base.OnInitializedAsync();
+    }
+}

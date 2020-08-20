@@ -10,6 +10,6 @@
 
         public string Year { get; set; }
 
-        public ICollection<Grade> Grades { get; set; } = new HashSet<Grade>();
+        public IEnumerable<GradeDto> Grades { get; set; } = new HashSet<GradeDto>();
     }
 }

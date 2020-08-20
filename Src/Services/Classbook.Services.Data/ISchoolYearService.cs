@@ -1,6 +1,7 @@
 ﻿namespace Classbook.Services.Data
 {
     using System.Collections.Generic;
+    using System.Linq;
     using System.Threading.Tasks;
 
     using Classbook.Services.Models;

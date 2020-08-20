@@ -1,16 +1,16 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using System.Security.Cryptography.X509Certificates;
-using System.Threading.Tasks;
-
-using Classbook.Data;
-using Classbook.Data.Models;
-using Classbook.Services.Models;
-
-using Microsoft.EntityFrameworkCore;
-
-namespace Classbook.Services.Data
+﻿namespace Classbook.Services.Data
 {
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Threading.Tasks;
+
+    using Classbook.Data;
+    using Classbook.Data.Models;
+
+    using Models;
+
+    using Microsoft.EntityFrameworkCore;
+
     public class SchoolYearService : ISchoolYearService
     {
         private readonly ClassbookDbContext context;
@@ -68,14 +68,18 @@ namespace Classbook.Services.Data
         }
 
         public async Task<SchoolYearDto> GetById(int id)
-        {
-            var model = await this.context.SchoolYears.FirstOrDefaultAsync(y => y.Id == id);
-            return new SchoolYearDto()
-            {
-                Id = model.Id,
-                Year = model.Year,
-            };
-        }
+            => await this.context.SchoolYears
+                .Select(x => new SchoolYearDto()
+                {
+                    Id = x.Id,
+                    Year = x.Year,
+                    Grades = x.Grades.Select(y => new GradeDto()
+                    {
+                        Id = y.Id,
+                        GradeNuber = y.GradeNumber,
+                        SchoolYearId = y.SchoolYearId
+                    }),
+                }).FirstOrDefaultAsync(y => y.Id == id);
 
         public async Task Restore(int id)
         {

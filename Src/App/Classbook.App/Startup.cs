@@ -14,10 +14,10 @@ namespace Classbook.App
     using Classbook.Data;
     using Classbook.Data.Models;
     using Classbook.Services.Data;
-    using ElectronNET.API;
 
-    using System.Threading.Tasks;
     using System;
+
+    using static Infrastructure.ElectronUtility;
 
     public class Startup
     {
@@ -99,15 +99,7 @@ namespace Classbook.App
                 endpoints.MapFallbackToPage("/_Host");
             });
 
-            if (HybridSupport.IsElectronActive)
-            {
-                ElectronBootstrap();
-            }
-        }
-        
-        private void ElectronBootstrap()
-        {
-            Task.Run(async () => await Electron.WindowManager.CreateWindowAsync());
+            ElectronBootstrap();
         }
     }
 }

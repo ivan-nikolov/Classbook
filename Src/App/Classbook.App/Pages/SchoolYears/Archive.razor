@@ -36,15 +36,10 @@ else
 
     private ClaimsPrincipal user;
 
-    private BrowserWindow window;
-
     protected override async Task OnInitializedAsync()
     {
         this.user = (await this.authenticationStateTask).User;
-        if (HybridSupport.IsElectronActive)
-        {
-            this.window = Electron.WindowManager.BrowserWindows.First();
-        }
+        
         years = (await this.yearsService.AllByUserId(user.GetId(), true))
             .Select(x => new SchoolYearViewModel()
             {
@@ -59,14 +54,14 @@ else
     private async Task OnDelete(int id)
     {
         await this.yearsService.Delete(id);
-        this.window?.Reload();
+        ReloadWindow();
         this.StateHasChanged();
     }
 
     private async Task OnRestore(int id)
     {
         await this.yearsService.Restore(id);
-        this.window?.Reload();
+        ReloadWindow();
         this.StateHasChanged();
     }
 }
