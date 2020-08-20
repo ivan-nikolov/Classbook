@@ -54,14 +54,14 @@ else
     private async Task OnDelete(int id)
     {
         await this.yearsService.Delete(id);
-        ReloadWindow();
+        Window.ReloadWindow();
         this.StateHasChanged();
     }
 
     private async Task OnRestore(int id)
     {
         await this.yearsService.Restore(id);
-        ReloadWindow();
+        Window.ReloadWindow();
         this.StateHasChanged();
     }
 }

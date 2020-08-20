@@ -56,7 +56,7 @@ else
     private async Task OnArchive(int id)
     {
         await this.yearsService.Archive(id);
-        ReloadWindow();
+        Window.ReloadWindow();
         this.StateHasChanged();
     }
 }

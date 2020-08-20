@@ -17,7 +17,7 @@ namespace Classbook.App
 
     using System;
 
-    using static Infrastructure.ElectronUtility;
+    using Classbook.App.Infrastructure.ElectronUtitlity;
 
     public class Startup
     {
@@ -99,7 +99,7 @@ namespace Classbook.App
                 endpoints.MapFallbackToPage("/_Host");
             });
 
-            ElectronBootstrap();
+            ElectronHelper.Window.ElectronBootstrap();
         }
     }
 }
