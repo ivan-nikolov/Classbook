@@ -14,6 +14,7 @@ namespace Classbook.App
     using Classbook.Data;
     using Classbook.Data.Models;
     using Classbook.Services.Data;
+    using Classbook.App.Components.Common.ToastNotifications;
 
     using System;
 
@@ -58,6 +59,7 @@ namespace Classbook.App
             services.AddTransient<IGradeService, GradeService>();
 
             services.AddScoped<AuthenticationStateProvider, RevalidatingIdentityAuthenticationStateProvider<IdentityUser>>();
+            services.AddScoped<IToastService, ToastService>();
             services.AddSingleton<WeatherForecastService>();
         }
 

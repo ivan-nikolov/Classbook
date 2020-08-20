@@ -11,18 +11,20 @@ else
     <h4>@this.year.Year</h4>
     @if (this.year.Grades.Count == 0)
     {
+        <hr />
         <p>Няма открити класове за текущата година.</p>
     }
     else
     {
-        <ul>
+        <hr />
+        <ul class="list-group list-group-horizontal d-flex justify-content-between" style="list-style-type:none;">
             @foreach (var grade in this.year.Grades)
             {
-                <li><a class="nav-link" href="/grades/details/@grade.Id">@grade.GradeNumber</a></li>
+                <li><a class="btn btn-sm btn-outline-primary list-group-item" href="/grades/details/@grade.Id">@grade.GradeNumber</a></li>
             }
         </ul>
     }
-
+    <hr />
     <NavLink class="btn btn-outline-info" href="/grades/create">Добави клас</NavLink>
 }
 

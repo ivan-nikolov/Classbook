@@ -20,5 +20,7 @@
         Task UpdateAsync(GradeDto grade);
 
         Task GetByIdAsync(int id);
+
+        Task<bool> GradeExistsForSchoolYearAsync(int yearId, int gradeNumber);
     }
 }

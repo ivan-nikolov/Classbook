@@ -1,7 +1,8 @@
 ﻿@page "/years/create"
-@inject Classbook.Services.Data.ISchoolYearService service
 @using Classbook.App.Models.SchoolYear
+@inject Classbook.Services.Data.ISchoolYearService service
 @inject NavigationManager NavManager
+@inject IToastService toastService
 @attribute [Authorize]
 
 <EditForm Model="input" OnValidSubmit="HandleValidSubmit">
@@ -35,6 +36,7 @@
     private async Task HandleValidSubmit()
     {
         await service.CreateAsync(input.Year, this.user.GetId());
-        NavManager.NavigateTo("/years/all", true);
+        this.toastService.ShowSuccess("Учебната година е създадена успешно.");
+        NavManager.NavigateTo("/years/all", false);
     }
 }

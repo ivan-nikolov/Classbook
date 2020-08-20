@@ -5,6 +5,7 @@
 @inject Classbook.Services.Data.ISchoolYearService yearsService;
 @inject Classbook.Services.Data.IGradeService gradeService;
 @inject NavigationManager navManager;
+@inject IToastService ToastService;
 @implements IDisposable
 
 @if (this.years == null)
@@ -18,7 +19,7 @@ else if (this.years.Count == 0)
 }
 else
 {
-    <EditForm EditContext="this.editContext">
+    <EditForm EditContext="this.editContext" OnSubmit="this.HandleSubmit">
         <DataAnnotationsValidator />
         <ValidationSummary />
         <div class="form-group row">
@@ -84,18 +85,14 @@ else
     {
         var messages = this.editContext.GetValidationMessages(this.editContext.Field(nameof(this.input.SchoolYearId)));
         this.isYearSelected = messages.Count() == 0;
-        Window.ReloadWindow();
-        this.StateHasChanged();
     }
 
     private void OnFieldChange(object sender, FieldChangedEventArgs e)
     {
         this.isValidInput = this.editContext.Validate();
-        Window.ReloadWindow();
-        this.StateHasChanged();
     }
 
-    private async Task HandleValidSubmit()
+    private async Task HandleSubmit()
     {
         var isValid = this.editContext.Validate() && await this.ServerValidate();
 
@@ -108,16 +105,19 @@ else
             };
 
             await this.gradeService.CreateAsync(dto);
-            this.navManager.NavigateTo($"/years/details/{this.input.SchoolYearId}", true);
+            this.ToastService.ShowSuccess("Класът е успешно създаден.");
+            
+            this.navManager.NavigateTo($"/years/details/{this.input.SchoolYearId}", false);
         }
         else
         {
-
+            this.ToastService.ShowError("Неуспешен запис");
         }
     }
 
     private async Task<bool> ServerValidate()
-        => await this.yearsService.GetById(this.input.SchoolYearId) != null;
+        => await this.yearsService.GetById(this.input.SchoolYearId) != null
+                 && await this.gradeService.GradeExistsForSchoolYearAsync(this.input.SchoolYearId, this.input.GradeNumber) == false;
 
     public void Dispose()
     {

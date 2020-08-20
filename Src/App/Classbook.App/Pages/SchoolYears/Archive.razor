@@ -1,6 +1,8 @@
 ﻿@page "/years/archive"
 @using Classbook.App.Models.SchoolYear
 @inject Classbook.Services.Data.ISchoolYearService yearsService
+@inject IToastService toastService
+@inject NavigationManager navManager
 
 @if (this.years == null)
 {
@@ -20,7 +22,7 @@ else
                     <h4>@year.Year</h4>
                     <div>
                         <button class="btn btn-outline-info" @onclick="@((e) => this.OnRestore(year.Id))">Възстанови</button>
-                        <button class="btn btn-outline-danger" @onclick="@((e) => this.OnDelete(year.Id))">Изтрий</button>
+                        <button class="btn btn-outline-danger" @onclick="@((e) => this.OnDelete(year.Id, year.Year))">Изтрий</button>
                     </div>
                 </div>
             </li>
@@ -39,7 +41,7 @@ else
     protected override async Task OnInitializedAsync()
     {
         this.user = (await this.authenticationStateTask).User;
-        
+
         years = (await this.yearsService.AllByUserId(user.GetId(), true))
             .Select(x => new SchoolYearViewModel()
             {
@@ -51,17 +53,25 @@ else
         await base.OnInitializedAsync();
     }
 
-    private async Task OnDelete(int id)
+    private async Task OnDelete(int id, string year)
     {
         await this.yearsService.Delete(id);
-        Window.ReloadWindow();
+        this.RemoveYear(id);
         this.StateHasChanged();
+        this.toastService.ShowSuccess($"Учебна година {year} е изтрита успешно");
     }
 
     private async Task OnRestore(int id)
     {
         await this.yearsService.Restore(id);
-        Window.ReloadWindow();
+        this.RemoveYear(id);
         this.StateHasChanged();
+        this.toastService.ShowInfo("Учебната година е възстановена.");
+    }
+
+    private void RemoveYear(int id)
+    {
+        var year = this.years.FirstOrDefault(y => y.Id == id);
+        this.years.Remove(year);
     }
 }

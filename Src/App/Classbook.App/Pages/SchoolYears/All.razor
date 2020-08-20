@@ -1,6 +1,7 @@
 ﻿@page "/"
 @page "/years/all"
 @inject Classbook.Services.Data.ISchoolYearService yearsService
+@inject IToastService toastService
 @using Classbook.App.Models.SchoolYear
 
 @if (this.years == null)
@@ -56,7 +57,9 @@ else
     private async Task OnArchive(int id)
     {
         await this.yearsService.Archive(id);
-        Window.ReloadWindow();
+        var year = this.years.FirstOrDefault(y => y.Id == id);
+        this.years.Remove(year);
         this.StateHasChanged();
+        this.toastService.ShowInfo("Успешно архивиране.");
     }
 }

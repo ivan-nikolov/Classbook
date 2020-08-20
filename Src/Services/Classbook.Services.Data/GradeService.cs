@@ -60,6 +60,9 @@
             => await this.context.Grades
             .FirstOrDefaultAsync(g => g.Id == id);
 
+        public async Task<bool> GradeExistsForSchoolYearAsync(int yearId, int gradeNumber)
+            => await this.context.Grades.FirstOrDefaultAsync(g => g.GradeNumber == gradeNumber && g.SchoolYearId == yearId) != null;
+
         public async Task RestoreAsync(int id)
         {
             var grade = await this.context.Grades.FirstOrDefaultAsync(g => g.Id == id);

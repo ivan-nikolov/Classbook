@@ -1,8 +1,12 @@
 ﻿@page "/"
 @namespace Classbook.App.Pages
+@using Classbook.App.Components.Common.ToastNotifications
 @addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
 @{
     Layout = null;
+    string successClass = "success-toast-override";
+    string iconClass = "fa fa-thumbs-up";
+    string errorIconClass = "fa fa-bug";
 }
 
 <!DOCTYPE html>
@@ -14,8 +18,16 @@
     <base href="~/" />
     <link rel="stylesheet" href="css/bootstrap/bootstrap.min.css" />
     <link href="css/site.css" rel="stylesheet" />
+    <link href="css/toast.css" rel="stylesheet" />
 </head>
 <body>
+    <component type="typeof(BlazoredToasts)"
+               Param-Position="ToastPosition.BottomRight"
+               Param-Timeout="10"
+               Param-SuccessClass="successClass"
+               Param-SuccessIconClass="iconClass"
+               Param-ErrorIconClass="errorIconClass"
+               render-mode="ServerPrerendered"/>
     <app>
         
         <component type="typeof(App)" render-mode="ServerPrerendered" />
