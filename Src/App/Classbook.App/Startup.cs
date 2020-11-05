@@ -19,6 +19,7 @@ namespace Classbook.App
     using System;
 
     using Classbook.App.Infrastructure.ElectronUtitlity;
+    using Classbook.App.Components.Common.Modal;
 
     public class Startup
     {
@@ -47,7 +48,7 @@ namespace Classbook.App
                 options.Cookie.HttpOnly = true;
                 options.ExpireTimeSpan = TimeSpan.FromMinutes(5);
 
-                options.LoginPath = "/Account/Login";
+                options.LoginPath = "/Login";
                 options.AccessDeniedPath = "/Account/AccessDenied";
                 options.SlidingExpiration = true;
             });
@@ -60,7 +61,7 @@ namespace Classbook.App
 
             services.AddScoped<AuthenticationStateProvider, RevalidatingIdentityAuthenticationStateProvider<IdentityUser>>();
             services.AddScoped<IToastService, ToastService>();
-            services.AddSingleton<WeatherForecastService>();
+            services.AddScoped<IModalService, ModalService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

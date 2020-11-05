@@ -20,6 +20,6 @@
 
         Task Restore(int id);
 
-        Task Update(int id, SchoolYearDto schoolYear);
+        Task UpdateAsync(int id, SchoolYearDto schoolYear);
     }
 }

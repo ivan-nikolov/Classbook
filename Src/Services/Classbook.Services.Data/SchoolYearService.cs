@@ -88,7 +88,7 @@
             await this.context.SaveChangesAsync();
         }
 
-        public async Task Update(int id, SchoolYearDto schoolYear)
+        public async Task UpdateAsync(int id, SchoolYearDto schoolYear)
         {
             var model = await this.context.SchoolYears.FirstOrDefaultAsync(y => y.Id == id);
             model.Year = schoolYear.Year;

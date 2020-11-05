@@ -1,6 +1,7 @@
 ﻿@page "/"
 @namespace Classbook.App.Pages
 @using Classbook.App.Components.Common.ToastNotifications
+@using Classbook.App.Components.Common.Modal
 @addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
 @{
     Layout = null;
@@ -19,6 +20,7 @@
     <link rel="stylesheet" href="css/bootstrap/bootstrap.min.css" />
     <link href="css/site.css" rel="stylesheet" />
     <link href="css/toast.css" rel="stylesheet" />
+    <link href="~/css/blazored-modal.css" rel="stylesheet" />
 </head>
 <body>
     <component type="typeof(BlazoredToasts)"
@@ -27,9 +29,9 @@
                Param-SuccessClass="successClass"
                Param-SuccessIconClass="iconClass"
                Param-ErrorIconClass="errorIconClass"
-               render-mode="ServerPrerendered"/>
+               render-mode="ServerPrerendered" />
     <app>
-        
+
         <component type="typeof(App)" render-mode="ServerPrerendered" />
     </app>
 

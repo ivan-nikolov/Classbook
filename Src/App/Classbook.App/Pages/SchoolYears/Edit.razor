@@ -1,0 +1,69 @@
+﻿@using Classbook.App.Models.SchoolYear
+@using Classbook.Services.Models
+@inject Classbook.Services.Data.ISchoolYearService yearsService
+@inject IModalService modalService
+
+@if (this.ShowForm)
+{
+<EditForm Model="input" OnValidSubmit="this.HandleValidSubmit">
+    <div class="form-group row">
+        <label for="year">
+            Учебна година:
+        </label>
+        <div class="col-sm-10">
+            <InputText id="year" name="year" @bind-Value="input.Year"  autofocus/>
+        </div>
+    </div>
+    <button class="btn btn-success" type="submit">Редактирай</button>
+</EditForm>
+}
+else
+{
+    <div class="alert alert-success" role="alert">
+        Годината е редактирана успешно!
+        <button class="btn btn-primary" @onclick="Done">Готово</button>
+    </div>
+}
+
+@code {
+    private SchoolYearInputModel input = new SchoolYearInputModel();
+    private int yearId;
+
+    [CascadingParameter]
+    public ModalParameters Parameters { get; set; }
+
+    [CascadingParameter]
+    public BlazoredModal BlazoredModal { get; set; }
+
+    bool ShowForm { get; set; } = true;
+    int FormId { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        this.yearId = this.BlazoredModal.Parameters.TryGet<int>("YearId");
+        var year = await this.yearsService.GetById(yearId);
+        this.input.Year = year.Year;
+        this.FormId = this.Parameters.Get<int>("FormId");
+        this.BlazoredModal.SetTitle("Редактиране на година");
+    }
+
+    private void Done()
+    {
+        this.modalService.Close(ModalResult.Ok("Form submitted"));
+    }
+
+    private void Cancel()
+    {
+        this.modalService.Cancel();
+    }
+
+    private async Task HandleValidSubmit()
+    {
+        await this.yearsService.UpdateAsync(this.yearId, new SchoolYearDto()
+        {
+            Year = this.input.Year
+        });
+
+        this.Done();
+    }
+}

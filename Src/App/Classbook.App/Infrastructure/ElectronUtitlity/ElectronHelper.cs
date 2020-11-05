@@ -26,6 +26,9 @@
                 }
             }
 
+            public static BrowserWindow GetMainWindow()
+                => Electron.WindowManager.BrowserWindows.First();
+            
             public static void CloseWidnow()
             {
                 if (HybridSupport.IsElectronActive)

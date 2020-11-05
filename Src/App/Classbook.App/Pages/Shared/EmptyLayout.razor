@@ -1,0 +1,19 @@
+﻿@inherits LayoutComponentBase
+@inject NavigationManager NavigationManager
+<CascadingAuthenticationState>
+    <div class="main">
+        <AuthorizeView>
+            <Authorized>
+                <div class="content px-4">
+                    @Body
+                </div>
+            </Authorized>
+            <NotAuthorized>
+                @{
+                    var returnUrl = NavigationManager.ToBaseRelativePath(NavigationManager.Uri);
+                    <RedirectToLogin ReturnUrl="@returnUrl"></RedirectToLogin>
+                }
+            </NotAuthorized>
+        </AuthorizeView>
+    </div>
+</CascadingAuthenticationState>

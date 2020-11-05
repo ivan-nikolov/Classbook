@@ -2,13 +2,18 @@
 @page "/years/all"
 @inject Classbook.Services.Data.ISchoolYearService yearsService
 @inject IToastService toastService
+@inject IModalService modalService
 @using Classbook.App.Models.SchoolYear
+@attribute [Authorize]
+
+<BlazoredModal />
 
 @if (this.years == null)
 {
     <h4>Зареждане...</h4>
 }
-else if(this.years.Count == 0){
+else if (this.years.Count == 0)
+{
     <h4>Няма регистрирани учебни години.</h4>
     <NavLink class="btn btn-outline-primary" href="/years/create">
         Създаване
@@ -25,7 +30,7 @@ else
                         <span class="oi oi-calendar" aria-hidden="true"></span> @year.Year
                     </a>
                     <div>
-                        <button class="btn btn-outline-info">Редактирай</button>
+                        <button class="btn btn-outline-info" @onclick="((e) => this.ShowModal(year.Id))">Редактирай</button>
                         <button class="btn btn-outline-warning" @onclick="@((e) => this.OnArchive(year.Id))">Архивирай</button>
                     </div>
                 </div>
@@ -46,13 +51,47 @@ else
     {
         this.user = (await this.authenticationStateTask).User;
 
-        years = (await yearsService.AllByUserId(user.GetId())).Select(x => new SchoolYearViewModel()
+        this.years = await this.GetYears();
+    }
+
+    private void ShowModal(int yearId)
+    {
+        var parameters = new ModalParameters();
+        parameters.Add("FormId", 1);
+        parameters.Add("YearId", yearId);
+        var options = new ModalOptions()
+        {
+            Position = "blazored-modal-topleft",
+        };
+
+        this.modalService.OnClose += this.ModalClosed;
+        this.modalService.OnClose += this.UpdateYears;
+        this.modalService.Show<Edit>("Edit Year Form", parameters, options);
+    }
+
+    private void ModalClosed(object sender, ModalResult modalResult)
+    {
+        this.modalService.OnClose -= this.ModalClosed;
+        this.modalService.OnClose -= this.UpdateYears;
+    }
+
+    private async void UpdateYears(object sender, ModalResult modalResult = null)
+    {
+        if (!modalResult.Cancelled)
+        {
+            this.years = await this.GetYears();
+            this.StateHasChanged();
+            this.toastService.ShowSuccess("Годината е редактирана успешно!");
+        }
+    }
+
+    private async Task<List<SchoolYearViewModel>> GetYears()
+        => (await yearsService.AllByUserId(user.GetId())).Select(x => new SchoolYearViewModel()
         {
             Id = x.Id,
             Year = x.Year
         })
         .ToList();
-    }
 
     private async Task OnArchive(int id)
     {

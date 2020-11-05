@@ -27,7 +27,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Classbook.Services.Data", "
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Classbook.Common", "Classbook.Common\Classbook.Common.csproj", "{DE29CD5A-677E-4F48-8BF0-F4360D5B44C9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Classbook.App.Infrastructure", "App\Classbook.App.Infrastructure\Classbook.App.Infrastructure.csproj", "{CABFDFA2-B459-4428-85EA-7CB856CF8940}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Classbook.App.Infrastructure", "App\Classbook.App.Infrastructure\Classbook.App.Infrastructure.csproj", "{CABFDFA2-B459-4428-85EA-7CB856CF8940}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
