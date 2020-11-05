@@ -1,8 +1,10 @@
-﻿using System.Collections.Generic;
-
-namespace Classbook.Services.Models
+﻿namespace Classbook.Services.Models
 {
-    public class GradeDto
+    using Classbook.Data.Models;
+
+    using Classook.Services.Mapping;
+
+    public class GradeDto : IMapFrom<Grade>, IMapTo<Grade>
     {
         public int Id { get; set; }
 

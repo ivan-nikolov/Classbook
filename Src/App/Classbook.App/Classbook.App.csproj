@@ -19,6 +19,7 @@
   <ItemGroup>
     <ProjectReference Include="..\..\Data\Classbook.Data\Classbook.Data.csproj" />
     <ProjectReference Include="..\..\Services\Classbook.Services.Data\Classbook.Services.Data.csproj" />
+    <ProjectReference Include="..\..\Services\Classook.Services.Mapping\Classook.Services.Mapping.csproj" />
     <ProjectReference Include="..\Classbook.App.Models\Classbook.App.Models.csproj" />
   </ItemGroup>
   <ItemGroup>
@@ -28,5 +29,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Components\Common\ToastNotifications\" />
+    <Folder Include="Pages\Subjects\" />
   </ItemGroup>
 </Project>

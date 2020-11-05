@@ -1,7 +1,7 @@
 ﻿@page "/grades/create"
 @page "/grades/create/{YearId:int}"
 @using Classbook.Services.Models;
-@using Classbook.App.Models.Grade;
+@using Classbook.App.Models.Grades;
 @using Classbook.App.Components.Utitlity;
 @inject Classbook.Services.Data.ISchoolYearService yearsService;
 @inject Classbook.Services.Data.IGradeService gradeService;
@@ -80,11 +80,7 @@ else
         this.editContext = new EditContext(input);
         this.isValidInput = this.editContext.Validate();
         this.user = (await this.authenticationStateTask).User;
-        this.years = (await this.yearsService.AllByUserId(user.GetId())).Select(x => new SchoolYearSelectModel()
-        {
-            Id = x.Id,
-            Name = x.Year,
-        })
+        this.years = (await this.yearsService.AllByUserIdAsync<SchoolYearSelectModel>(user.GetId()))
         .ToList();
 
         this.editContext.OnValidationStateChanged += this.OnValidationStateChanged;
@@ -95,7 +91,7 @@ else
     private void OnValidationStateChanged(object sender, ValidationStateChangedEventArgs e)
     {
         var messages = this.editContext.GetValidationMessages(this.editContext.Field(nameof(this.input.SchoolYearId)));
-        
+
         this.isYearSelected = messages.Count() == 0;
         this.StateHasChanged();
     }
@@ -104,13 +100,15 @@ else
     {
         this.isValidInput = this.editContext.Validate();
         Console.WriteLine(e.FieldIdentifier.FieldName);
-        
+
         this.StateHasChanged();
     }
 
     private async Task HandleSubmit()
     {
-        var isValid = this.editContext.Validate() && await this.ServerValidate();
+        var errorList = await this.ServerValidate();
+
+        var isValid = this.editContext.Validate() && !errorList.Any();
 
         if (isValid)
         {
@@ -127,13 +125,28 @@ else
         }
         else
         {
-            this.ToastService.ShowError("Неуспешен запис");
+            foreach (var error in errorList)
+            {
+                this.ToastService.ShowError(error);
+            }
         }
     }
 
-    private async Task<bool> ServerValidate()
-        => await this.yearsService.GetById(this.input.SchoolYearId) != null
-                 && await this.gradeService.GradeExistsForSchoolYearAsync(this.input.SchoolYearId, this.input.GradeNumber) == false;
+    private async Task<List<string>> ServerValidate()
+    {
+        var errorList = new List<string>();
+
+        if (!await this.yearsService.CheckIfExistsAsync(this.input.SchoolYearId))
+        {
+            errorList.Add("Учебната година не съществува.");
+        }
+        else if (await this.gradeService.GradeExistsForSchoolYearAsync(this.input.SchoolYearId, this.input.GradeNumber))
+        {
+            errorList.Add("Класът съществува за избраната учебна година.");
+        }
+
+        return errorList;
+    }
 
     public void Dispose()
     {

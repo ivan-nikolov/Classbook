@@ -7,7 +7,7 @@
 
     public interface IGradeService
     {
-        Task<IEnumerable<GradeDto>> AllByYearIdAsync(int yearId);
+        Task<IEnumerable<T>> AllByYearIdAsync<T>(int yearId);
 
         Task CreateAsync(GradeDto grade);
 
@@ -19,7 +19,7 @@
 
         Task UpdateAsync(GradeDto grade);
 
-        Task GetByIdAsync(int id);
+        Task<T> GetByIdAsync<T>(int id);
 
         Task<bool> GradeExistsForSchoolYearAsync(int yearId, int gradeNumber);
     }

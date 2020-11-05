@@ -9,6 +9,7 @@
     <ProjectReference Include="..\..\Data\Classbook.Data.Models\Classbook.Data.Models.csproj" />
     <ProjectReference Include="..\..\Data\Classbook.Data\Classbook.Data.csproj" />
     <ProjectReference Include="..\Classbook.Services.Models\Classbook.Services.Models.csproj" />
+    <ProjectReference Include="..\Classook.Services.Mapping\Classook.Services.Mapping.csproj" />
   </ItemGroup>
 
 </Project>

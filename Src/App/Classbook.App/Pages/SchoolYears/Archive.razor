@@ -1,5 +1,5 @@
 ﻿@page "/years/archive"
-@using Classbook.App.Models.SchoolYear
+@using Classbook.App.Models.SchoolYears
 @inject Classbook.Services.Data.ISchoolYearService yearsService
 @inject IToastService toastService
 @inject NavigationManager navManager
@@ -42,12 +42,7 @@ else
     {
         this.user = (await this.authenticationStateTask).User;
 
-        years = (await this.yearsService.AllByUserId(user.GetId(), true))
-            .Select(x => new SchoolYearViewModel()
-            {
-                Id = x.Id,
-                Year = x.Year
-            })
+        years = (await this.yearsService.AllByUserIdAsync<SchoolYearViewModel>(user.GetId(), true))
             .ToList();
 
         await base.OnInitializedAsync();
@@ -55,7 +50,7 @@ else
 
     private async Task OnDelete(int id, string year)
     {
-        await this.yearsService.Delete(id);
+        await this.yearsService.DeleteAsync(id);
         this.RemoveYear(id);
         this.StateHasChanged();
         this.toastService.ShowSuccess($"Учебна година {year} е изтрита успешно");
@@ -63,7 +58,7 @@ else
 
     private async Task OnRestore(int id)
     {
-        await this.yearsService.Restore(id);
+        await this.yearsService.RestoreAsync(id);
         this.RemoveYear(id);
         this.StateHasChanged();
         this.toastService.ShowInfo("Учебната година е възстановена.");

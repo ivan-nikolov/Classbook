@@ -1,7 +1,5 @@
 ﻿namespace Classbook.Data.Models
 {
-    using Classbook.Data.Common.Models;
-
     public class GradeSubject
     {
         public int GradeId { get; set; }

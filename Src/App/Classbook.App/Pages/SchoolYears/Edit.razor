@@ -1,4 +1,4 @@
-﻿@using Classbook.App.Models.SchoolYear
+﻿@using Classbook.App.Models.SchoolYears
 @using Classbook.Services.Models
 @inject Classbook.Services.Data.ISchoolYearService yearsService
 @inject IModalService modalService
@@ -6,15 +6,17 @@
 @if (this.ShowForm)
 {
 <EditForm Model="input" OnValidSubmit="this.HandleValidSubmit">
-    <div class="form-group row">
-        <label for="year">
+    <div class="form-group row align-items-stretch">
+        <label for="year" class="col">
             Учебна година:
         </label>
-        <div class="col-sm-10">
+        <div class="col-6">
             <InputText id="year" name="year" @bind-Value="input.Year"  autofocus/>
         </div>
+        <div class="col">
+            <button class="btn btn-success" type="submit">Редактирай</button>
+        </div>
     </div>
-    <button class="btn btn-success" type="submit">Редактирай</button>
 </EditForm>
 }
 else
@@ -41,7 +43,7 @@ else
     protected override async Task OnInitializedAsync()
     {
         this.yearId = this.BlazoredModal.Parameters.TryGet<int>("YearId");
-        var year = await this.yearsService.GetById(yearId);
+        var year = await this.yearsService.GetByIdAsync<SchoolYearDto>(yearId);
         this.input.Year = year.Year;
         this.FormId = this.Parameters.Get<int>("FormId");
         this.BlazoredModal.SetTitle("Редактиране на година");

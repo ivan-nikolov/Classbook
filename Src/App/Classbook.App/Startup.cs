@@ -9,17 +9,19 @@ namespace Classbook.App
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Extensions.Hosting;
 
+    using System;
+    using System.Reflection;
+
     using Classbook.App.Areas.Identity;
-    using Classbook.App.Data;
+    using Classbook.App.Components.Common.Modal;
+    using Classbook.App.Components.Common.ToastNotifications;
+    using Classbook.App.Infrastructure.ElectronUtitlity;
+    using Classbook.App.Models.Grades;
     using Classbook.Data;
     using Classbook.Data.Models;
     using Classbook.Services.Data;
-    using Classbook.App.Components.Common.ToastNotifications;
-
-    using System;
-
-    using Classbook.App.Infrastructure.ElectronUtitlity;
-    using Classbook.App.Components.Common.Modal;
+    using Classook.Services.Mapping;
+    using Classbook.Services.Models;
 
     public class Startup
     {
@@ -67,6 +69,10 @@ namespace Classbook.App
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+            AutoMapperConfig.RegisterMappings(
+                typeof(GradeInputModel).GetTypeInfo().Assembly,
+                typeof(SchoolYearDto).GetTypeInfo().Assembly);
+
             using (var serviceScope = app.ApplicationServices.CreateScope())
             {
                 var dbContext = serviceScope.ServiceProvider.GetRequiredService<ClassbookDbContext>();

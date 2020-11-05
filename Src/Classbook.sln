@@ -29,6 +29,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Classbook.Common", "Classbo
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Classbook.App.Infrastructure", "App\Classbook.App.Infrastructure\Classbook.App.Infrastructure.csproj", "{CABFDFA2-B459-4428-85EA-7CB856CF8940}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Classook.Services.Mapping", "Services\Classook.Services.Mapping\Classook.Services.Mapping.csproj", "{C30FCD86-E212-4DC3-A150-D1BF48FB2356}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -75,6 +77,10 @@ Global
 		{CABFDFA2-B459-4428-85EA-7CB856CF8940}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CABFDFA2-B459-4428-85EA-7CB856CF8940}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CABFDFA2-B459-4428-85EA-7CB856CF8940}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C30FCD86-E212-4DC3-A150-D1BF48FB2356}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C30FCD86-E212-4DC3-A150-D1BF48FB2356}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C30FCD86-E212-4DC3-A150-D1BF48FB2356}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C30FCD86-E212-4DC3-A150-D1BF48FB2356}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -89,6 +95,7 @@ Global
 		{8A9B4E4B-FAD4-4DEA-901F-A39A546C719C} = {CF7F9B47-7215-42BF-83CC-47C9E9AC1DDB}
 		{E3D6C031-AB7D-434C-BAC3-B8211117F9FC} = {CF7F9B47-7215-42BF-83CC-47C9E9AC1DDB}
 		{CABFDFA2-B459-4428-85EA-7CB856CF8940} = {EE08F88F-5C66-429E-B326-809BC4580E04}
+		{C30FCD86-E212-4DC3-A150-D1BF48FB2356} = {CF7F9B47-7215-42BF-83CC-47C9E9AC1DDB}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {3870068F-93AB-41E9-A3EC-D4A41288F260}

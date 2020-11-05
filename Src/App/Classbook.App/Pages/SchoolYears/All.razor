@@ -3,7 +3,7 @@
 @inject Classbook.Services.Data.ISchoolYearService yearsService
 @inject IToastService toastService
 @inject IModalService modalService
-@using Classbook.App.Models.SchoolYear
+@using Classbook.App.Models.SchoolYears
 @attribute [Authorize]
 
 <BlazoredModal />
@@ -86,16 +86,12 @@ else
     }
 
     private async Task<List<SchoolYearViewModel>> GetYears()
-        => (await yearsService.AllByUserId(user.GetId())).Select(x => new SchoolYearViewModel()
-        {
-            Id = x.Id,
-            Year = x.Year
-        })
+        => (await yearsService.AllByUserIdAsync<SchoolYearViewModel>(user.GetId()))
         .ToList();
 
     private async Task OnArchive(int id)
     {
-        await this.yearsService.Archive(id);
+        await this.yearsService.ArchiveAsync(id);
         var year = this.years.FirstOrDefault(y => y.Id == id);
         this.years.Remove(year);
         this.StateHasChanged();

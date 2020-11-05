@@ -123,7 +123,7 @@
                 this.componentDisableBackgroundCancel = options.DisableBackGroundCancel.Value;
             }
 
-            this.componentPosition = string.IsNullOrWhiteSpace(this.Position) ? this.Position : options.Position;
+            this.componentPosition = string.IsNullOrWhiteSpace(this.Position) ? options.Position : this.Position;
             if (string.IsNullOrWhiteSpace(this.componentPosition))
             {
                 this.componentPosition = DefaultPosition;

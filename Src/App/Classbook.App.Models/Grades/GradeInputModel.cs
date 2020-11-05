@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace Classbook.App.Models.Grade
+namespace Classbook.App.Models.Grades
 {
     public class GradeInputModel
     {

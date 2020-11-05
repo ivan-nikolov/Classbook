@@ -1,4 +1,4 @@
-﻿namespace Classbook.App.Models.SchoolYear
+﻿namespace Classbook.App.Models.SchoolYears
 {
     using System.ComponentModel.DataAnnotations;
 

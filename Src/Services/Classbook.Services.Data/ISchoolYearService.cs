@@ -10,16 +10,18 @@
     {
         Task CreateAsync(string year, string userId);
 
-        Task<SchoolYearDto> GetById(int id);
+        Task<T> GetByIdAsync<T>(int id);
 
-        Task<IEnumerable<SchoolYearDto>> AllByUserId(string userId, bool isArchived = false);
+        Task<IEnumerable<T>> AllByUserIdAsync<T>(string userId, bool isArchived = false);
 
-        Task Archive(int id);
+        Task ArchiveAsync(int id);
 
-        Task Delete(int id);
+        Task DeleteAsync(int id);
 
-        Task Restore(int id);
+        Task RestoreAsync(int id);
 
         Task UpdateAsync(int id, SchoolYearDto schoolYear);
+
+        Task<bool> CheckIfExistsAsync(int id);
     }
 }

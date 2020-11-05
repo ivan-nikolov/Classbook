@@ -3,8 +3,9 @@
     using System.Collections.Generic;
 
     using Classbook.Data.Models;
+    using Classook.Services.Mapping;
 
-    public class SchoolYearDto
+    public class SchoolYearDto : IMapFrom<SchoolYear>, IMapTo<SchoolYear>
     {
         public int Id { get; set; }
 

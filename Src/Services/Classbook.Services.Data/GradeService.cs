@@ -8,6 +8,8 @@
     using Classbook.Data.Models;
     using Classbook.Services.Models;
 
+    using Classook.Services.Mapping;
+
     using Microsoft.EntityFrameworkCore;
 
     public class GradeService : IGradeService
@@ -19,15 +21,10 @@
             this.context = context;
         }
 
-        public async Task<IEnumerable<GradeDto>> AllByYearIdAsync(int yearId)
+        public async Task<IEnumerable<T>> AllByYearIdAsync<T>(int yearId)
            => await this.context.Grades
             .Where(g => g.SchoolYearId == yearId)
-            .Select(g => new GradeDto()
-            {
-                Id = g.Id,
-                GradeNuber = g.GradeNumber,
-                SchoolYearId = g.SchoolYearId,
-            })
+            .To<T>()
             .ToListAsync();
             
 
@@ -56,9 +53,11 @@
             await this.context.SaveChangesAsync();
         }
 
-        public async Task GetByIdAsync(int id)
+        public async Task<T> GetByIdAsync<T>(int id)
             => await this.context.Grades
-            .FirstOrDefaultAsync(g => g.Id == id);
+            .Where(x => x.Id == id)
+            .To<T>()
+            .FirstOrDefaultAsync();
 
         public async Task<bool> GradeExistsForSchoolYearAsync(int yearId, int gradeNumber)
             => await this.context.Grades.FirstOrDefaultAsync(g => g.GradeNumber == gradeNumber && g.SchoolYearId == yearId) != null;
@@ -73,10 +72,8 @@
         public async Task UpdateAsync(GradeDto grade)
         {
             var gradeToUpdate = await this.context.Grades.FirstOrDefaultAsync(x => x.Id == grade.Id);
-            gradeToUpdate.GradeNumber = grade.GradeNuber;
-            gradeToUpdate.SchoolYearId = grade.SchoolYearId;
-            var entry = this.context.Entry(gradeToUpdate);
-            entry.State = EntityState.Modified;
+            this.context.Entry(gradeToUpdate).CurrentValues.SetValues(grade);
+            this.context.Entry(gradeToUpdate).State = EntityState.Modified;
             await this.context.SaveChangesAsync();
         }
     }

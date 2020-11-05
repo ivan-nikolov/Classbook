@@ -1,13 +1,5 @@
 ﻿@inherits LayoutComponentBase
-@using ElectronNET.API
 @inject NavigationManager NavigationManager
-@*@inject AuthenticationStateProvider AuthenticationStateProvider*@
-
-@*<BlazoredToasts Position="ToastPosition.BottomRight"
-    Timeout="10"
-    SuccessClass="success-toast-override"
-    SuccessIconClass="fa fa-thumbs-up"
-    ErrorIconClass="fa fa-bug" />*@
 
 <CascadingAuthenticationState>
     <div class="sidebar">
@@ -20,7 +12,6 @@
             <NavLink class="nav-link" href="About">
                 Относно
             </NavLink>
-            <button class="btn-sm btn-outline-danger" style="border-radius: 0 !important; border:none !important" @onclick="this.OnExit"><span class="oi oi-x"></span></button>
         </div>
         <AuthorizeView>
             <Authorized>
@@ -37,18 +28,3 @@
         </AuthorizeView>
     </div>
 </CascadingAuthenticationState>
-
-@code {
-
-    //private AuthenticationState authenticationState;
-
-    //protected override async Task OnInitializedAsync()
-    //{
-    //    this.authenticationState = await this.AuthenticationStateProvider.GetAuthenticationStateAsync();
-    //}
-
-    private void OnExit()
-    {
-        Electron.WindowManager.BrowserWindows.First().Close();
-    }
-}

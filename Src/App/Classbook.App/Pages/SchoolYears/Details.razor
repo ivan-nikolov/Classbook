@@ -1,5 +1,5 @@
 ﻿@page "/years/details/{Id:int}"
-@using Classbook.App.Models.SchoolYear;
+@using Classbook.App.Models.SchoolYears;
 @inject Classbook.Services.Data.ISchoolYearService yearsService;
 
 @if (!this.yearExists)
@@ -39,18 +39,7 @@ else
 
     protected override async Task OnInitializedAsync()
     {
-        var yearDto = await this.yearsService.GetById(this.Id);
-        this.year = new SchoolYearDetailsViewModel()
-        {
-            Id = yearDto.Id,
-            Year = yearDto.Year,
-            Grades = yearDto.Grades.Select(y => new YearDetailsGradeViewModel()
-            {
-                Id = y.Id,
-                GradeNumber = y.GradeNuber,
-                SchoolYearId = yearDto.Id
-            }).ToList()
-        };
+        this.year= await this.yearsService.GetByIdAsync<SchoolYearDetailsViewModel>(this.Id);
 
         this.yearExists = this.year != null;
 

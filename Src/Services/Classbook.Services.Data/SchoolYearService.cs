@@ -10,6 +10,7 @@
     using Models;
 
     using Microsoft.EntityFrameworkCore;
+    using Classook.Services.Mapping;
 
     public class SchoolYearService : ISchoolYearService
     {
@@ -20,7 +21,7 @@
             this.context = context;
         }
 
-        public async Task<IEnumerable<SchoolYearDto>> AllByUserId(string userId, bool isArchived = false)
+        public async Task<IEnumerable<T>> AllByUserIdAsync<T>(string userId, bool isArchived = false)
         {
             var result = this.context.SchoolYears.Where(sy => sy.UserId == userId).AsQueryable();
             if(isArchived == true)
@@ -33,20 +34,20 @@
             }
 
             return await result
-                .Select(x => new SchoolYearDto()
-                {
-                    Id = x.Id,
-                    Year = x.Year
-                })
+            .To<T>()
             .ToListAsync();
         }
 
-        public async Task Archive(int id)
+        public async Task ArchiveAsync(int id)
         {
             var year = await this.context.SchoolYears.FirstOrDefaultAsync(y => y.Id == id);
             year.IsDeleted = true;
             await this.context.SaveChangesAsync();
         }
+
+        public async Task<bool> CheckIfExistsAsync(int id)
+            => await this.context.SchoolYears
+            .CountAsync(x => x.Id == id) > 0;
 
         public async Task CreateAsync(string year, string userId)
         {
@@ -60,28 +61,20 @@
             await this.context.SaveChangesAsync();
         }
 
-        public async Task Delete(int id)
+        public async Task DeleteAsync(int id)
         {
             var model = await this.context.SchoolYears.FirstOrDefaultAsync(y => y.Id == id);
             this.context.Remove(model);
             await this.context.SaveChangesAsync();
         }
 
-        public async Task<SchoolYearDto> GetById(int id)
+        public async Task<T> GetByIdAsync<T>(int id)
             => await this.context.SchoolYears
-                .Select(x => new SchoolYearDto()
-                {
-                    Id = x.Id,
-                    Year = x.Year,
-                    Grades = x.Grades.Select(y => new GradeDto()
-                    {
-                        Id = y.Id,
-                        GradeNuber = y.GradeNumber,
-                        SchoolYearId = y.SchoolYearId
-                    }),
-                }).FirstOrDefaultAsync(y => y.Id == id);
+            .Where(x => x.Id == id)
+            .To<T>()
+            .FirstOrDefaultAsync();
 
-        public async Task Restore(int id)
+        public async Task RestoreAsync(int id)
         {
             var schoolYear = await this.context.SchoolYears.FirstOrDefaultAsync(y => y.Id == id);
             schoolYear.IsDeleted = false;

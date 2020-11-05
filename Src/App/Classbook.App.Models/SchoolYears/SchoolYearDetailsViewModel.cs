@@ -1,8 +1,12 @@
-﻿namespace Classbook.App.Models.SchoolYear
+﻿namespace Classbook.App.Models.SchoolYears
 {
     using System.Collections.Generic;
 
-    public class SchoolYearDetailsViewModel
+    using Classbook.Data.Models;
+
+    using Classook.Services.Mapping;
+
+    public class SchoolYearDetailsViewModel : IMapFrom<SchoolYear>
     {
         public int Id { get; set; }
 

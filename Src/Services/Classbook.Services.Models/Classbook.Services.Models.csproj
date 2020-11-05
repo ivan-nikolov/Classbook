@@ -6,6 +6,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\Data\Classbook.Data.Models\Classbook.Data.Models.csproj" />
+    <ProjectReference Include="..\Classook.Services.Mapping\Classook.Services.Mapping.csproj" />
   </ItemGroup>
 
 </Project>
