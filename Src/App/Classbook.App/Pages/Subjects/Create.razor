@@ -1,0 +1,58 @@
+﻿@page "/subjects/create";
+@using Classbook.App.Models.Subjects;
+@using static Classbook.Common.ValidationsMessages.SubjectMessages;
+@using static Classbook.Common.Messages.SubjectMessages;
+@inject Classbook.Services.Data.ISubjectService subjectSurvice;
+@inject IToastService toastService;
+
+<div class="form-container">
+    <div class="small-form-container">
+        <EditForm class="d-flex flex-column" EditContext="this.editContext" OnSubmit="() => this.HandleSubmit()">
+            <DataAnnotationsValidator />
+            <ValidationSummary />
+
+            <div class="form-group row">
+                <label for="SchoolYearId" class="col-sm-2 col-form-label mr-1">
+                    Предмет: 
+                </label>
+                <div class="col-sm-12">
+                    <InputText class="form-control" min="1" max="13" step="1" @bind-Value="this.input.Name" id="SchoolYearId"/>
+                </div>
+            </div>
+
+            <button type="submit" class="btn btn-success align-self-end">Създай</button>
+        </EditForm>
+    </div>
+</div>
+
+
+
+@code {
+    private CreateSubjectInputModel input;
+    private EditContext editContext;
+
+    protected override void OnInitialized()
+    {
+        this.input = new CreateSubjectInputModel();
+        this.editContext = new EditContext(this.input);
+        base.OnInitialized();
+    }
+
+    private async Task HandleSubmit()
+    {
+        var isValid = this.editContext.Validate() && !await this.SurverValidate();
+
+        if (isValid)
+        {
+            await this.subjectSurvice.CreateAsync<CreateSubjectInputModel>(this.input);
+            this.toastService.ShowSuccess(CreatedSuccessfuly);
+        }
+        else
+        {
+            this.toastService.ShowError(NameExistsErrorMessage);
+        }
+    }
+
+    private async Task<bool> SurverValidate()
+        => await this.subjectSurvice.CheckIfSubjectNameExists(this.input.Name);
+}

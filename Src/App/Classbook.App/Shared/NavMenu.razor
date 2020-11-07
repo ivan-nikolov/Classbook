@@ -6,35 +6,63 @@
     </button>
 </div>
 
-<div class="@NavMenuCssClass" @onclick="ToggleNavMenu">
+<div class="@NavMenuCssClass">
     <ul class="nav flex-column">
         <AuthorizeView>
             <Authorized>
                 <li class="nav-item px-3">
-                    <NavLink class="nav-link" @onclick="this.ToggleSubMenu">
-                        <span class=@this.menuIcon aria-hidden="true"></span> Учебни години
+                    <NavLink class="nav-link" @onclick="@(() => this.ToggleSubMenu("schoolYear"))">
+                        <span class=@this.menuKeys["schoolYear"].MenuIcon aria-hidden="true"></span> Учебни години
                     </NavLink>
-                    @if (collapseSubMenu)
+                    @if (this.menuKeys["schoolYear"].IsShown)
                     {
-                <ul class="nav flex-column">
+                        <ul class="nav flex-column">
 
-                    <li class="nav-item px-3">
-                        <NavLink class="nav-link" href="/years/all" Match="NavLinkMatch.All">
-                            <span class="oi oi-list-rich" aria-hidden="true"></span> Всички
-                        </NavLink>
-                    </li>
+                            <li class="nav-item px-3">
+                                <NavLink class="nav-link" href="/years/all" Match="NavLinkMatch.All">
+                                    <span class="oi oi-list-rich" aria-hidden="true"></span> Всички
+                                </NavLink>
+                            </li>
 
-                    <li class="nav-item px-3">
-                        <NavLink class="nav-link" href="/years/create" Match="NavLinkMatch.All">
-                            <span class="oi oi-plus" aria-hidden="true"></span> Добавяне
-                        </NavLink>
-                    </li>
-                    <li class="nav-item px-3">
-                        <NavLink class="nav-link" href="/years/archive" Match="NavLinkMatch.All">
-                            <span class="oi oi-spreadsheet" aria-hidden="true"></span> Архив
-                        </NavLink>
-                    </li>
-                </ul>
+                            <li class="nav-item px-3">
+                                <NavLink class="nav-link" href="/years/create" Match="NavLinkMatch.All">
+                                    <span class="oi oi-plus" aria-hidden="true"></span> Добавяне
+                                </NavLink>
+                            </li>
+                            <li class="nav-item px-3">
+                                <NavLink class="nav-link" href="/years/archive" Match="NavLinkMatch.All">
+                                    <span class="oi oi-spreadsheet" aria-hidden="true"></span> Архив
+                                </NavLink>
+                            </li>
+                        </ul>
+                    }
+                </li>
+
+                <li class="nav-item px-3">
+                    <NavLink class="nav-link" @onclick="@(() => this.ToggleSubMenu("subject"))">
+                        <span class=@this.menuKeys["subject"].MenuIcon aria-hidden="true"></span> Предмети
+                    </NavLink>
+                    @if (this.menuKeys["subject"].IsShown)
+                    {
+                        <ul class="nav flex-column">
+
+                            @*<li class="nav-item px-3">
+                                    <NavLink class="nav-link" href="/years/all" Match="NavLinkMatch.All">
+                                        <span class="oi oi-list-rich" aria-hidden="true"></span> Всички
+                                    </NavLink>
+                                </li>*@
+
+                            <li class="nav-item px-3">
+                                <NavLink class="nav-link" href="/subjects/create" Match="NavLinkMatch.All">
+                                    <span class="oi oi-plus" aria-hidden="true"></span> Добавяне
+                                </NavLink>
+                            </li>
+                            @*<li class="nav-item px-3">
+                                    <NavLink class="nav-link" href="/years/archive" Match="NavLinkMatch.All">
+                                        <span class="oi oi-spreadsheet" aria-hidden="true"></span> Архив
+                                    </NavLink>
+                                </li>*@
+                        </ul>
                     }
                 </li>
             </Authorized>
@@ -45,7 +73,18 @@
 @code {
     private bool collapseNavMenu = true;
     private bool collapseSubMenu;
-    private string menuIcon = "oi oi-menu";
+    private Dictionary<string, SubmenuParameters> menuKeys;
+
+
+    protected override void OnInitialized()
+    {
+        this.menuKeys = new Dictionary<string, SubmenuParameters>()
+    {
+            { "schoolYear", new SubmenuParameters() },
+            { "subject", new SubmenuParameters() }
+        };
+        base.OnInitialized();
+    }
 
     private string NavMenuCssClass => collapseNavMenu ? "collapse" : null;
 
@@ -54,16 +93,26 @@
         collapseNavMenu = !collapseNavMenu;
     }
 
-    private void ToggleSubMenu()
+    private void ToggleSubMenu(string menuKey)
     {
-        this.collapseSubMenu = !this.collapseSubMenu;
-        if (collapseSubMenu)
+        this.menuKeys[menuKey].IsShown = !this.menuKeys[menuKey].IsShown;
+        if (this.menuKeys[menuKey].IsShown)
         {
-            this.menuIcon = "oi oi-arrow-circle-bottom";
+            this.menuKeys[menuKey].MenuIcon = "oi oi-arrow-circle-bottom";
         }
         else
         {
-            this.menuIcon = "oi oi-menu";
+            this.menuKeys[menuKey].MenuIcon = "oi oi-menu";
         }
+    }
+
+    private class SubmenuParameters
+    {
+        private const string DefaultMenuIcon = "oi oi-menu";
+        private const string DefaultMenuArrowIcon = "oi oi-arrow-circle-bottom";
+
+        public bool IsShown { get; set; } = false;
+
+        public string MenuIcon { get; set; } = DefaultMenuIcon;
     }
 }

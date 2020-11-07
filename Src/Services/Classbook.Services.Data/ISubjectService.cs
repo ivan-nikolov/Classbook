@@ -14,5 +14,7 @@
         Task<T> GetByIdAsync<T>(int id);
 
         Task<IEnumerable<T>> GetAllAsync<T>();
+
+        Task<bool> CheckIfSubjectNameExists(string name);
     }
 }

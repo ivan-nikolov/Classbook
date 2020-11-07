@@ -3,6 +3,8 @@
 @using Classbook.Services.Models;
 @using Classbook.App.Models.Grades;
 @using Classbook.App.Components.Utitlity;
+@using static Classbook.Common.ValidationsMessages.GradeMessages;
+@using static Classbook.Common.Messages.GradeMessages;
 @inject Classbook.Services.Data.ISchoolYearService yearsService;
 @inject Classbook.Services.Data.IGradeService gradeService;
 @inject NavigationManager navManager;
@@ -119,7 +121,7 @@ else
             };
 
             await this.gradeService.CreateAsync(dto);
-            this.ToastService.ShowSuccess("Класът е успешно създаден.");
+            this.ToastService.ShowSuccess(CreatedSuccessfuly);
 
             this.navManager.NavigateTo($"/years/details/{this.input.SchoolYearId}", false);
         }
@@ -138,11 +140,11 @@ else
 
         if (!await this.yearsService.CheckIfExistsAsync(this.input.SchoolYearId))
         {
-            errorList.Add("Учебната година не съществува.");
+            errorList.Add(SchoolYearDoesNotExistsErrorMessage);
         }
         else if (await this.gradeService.GradeExistsForSchoolYearAsync(this.input.SchoolYearId, this.input.GradeNumber))
         {
-            errorList.Add("Класът съществува за избраната учебна година.");
+            errorList.Add(GradeExistsErrorMessage);
         }
 
         return errorList;

@@ -28,7 +28,7 @@
         public async Task DeleteAsync(int id)
         {
             var subject = await this.context.Subjects.FirstOrDefaultAsync(x => x.Id == id);
-            this.context.Subjects.Remove(subject);
+            subject.IsDeleted = true;
             await this.context.SaveChangesAsync();
         }
 
@@ -50,5 +50,9 @@
             .Where(x => x.Id == id)
             .To<T>()
             .FirstOrDefaultAsync();
+
+        public async Task<bool> CheckIfSubjectNameExists(string name)
+            => await this.context.Subjects
+                .CountAsync(x => x.Name == name) > 0;
     }
 }
