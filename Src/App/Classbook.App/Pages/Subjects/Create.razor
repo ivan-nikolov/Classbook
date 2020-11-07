@@ -4,6 +4,7 @@
 @using static Classbook.Common.Messages.SubjectMessages;
 @inject Classbook.Services.Data.ISubjectService subjectSurvice;
 @inject IToastService toastService;
+@inject NavigationManager navManager;
 
 <div class="form-container">
     <div class="small-form-container">
@@ -20,7 +21,7 @@
                 </div>
             </div>
 
-            <button type="submit" class="btn btn-success align-self-end">Създай</button>
+            <button type="submit" class="btn btn-outline-primary align-self-end">Създай</button>
         </EditForm>
     </div>
 </div>
@@ -46,6 +47,7 @@
         {
             await this.subjectSurvice.CreateAsync<CreateSubjectInputModel>(this.input);
             this.toastService.ShowSuccess(CreatedSuccessfuly);
+            this.navManager.NavigateTo("/subjects/all", false);
         }
         else
         {

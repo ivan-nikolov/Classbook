@@ -1,9 +1,13 @@
-﻿using System.ComponentModel.DataAnnotations;
-using Classbook.Common;
-
-namespace Classbook.App.Models.Subjects
+﻿namespace Classbook.App.Models.Subjects
 {
-    public class CreateSubjectInputModel
+    using System.ComponentModel.DataAnnotations;
+
+    using Classbook.Common;
+    using Classbook.Data.Models;
+
+    using Classook.Services.Mapping;
+
+    public class CreateSubjectInputModel : IMapTo<Subject>
     {
         [Required]
         [StringLength(60, MinimumLength = 1, ErrorMessage = ValidationsMessages.SchoolYearMessages.YearLeghtErrorMessage)]

@@ -22,36 +22,40 @@ else if (this.years.Count == 0)
 }
 else
 {
-    <EditForm EditContext="this.editContext" OnSubmit="this.HandleSubmit">
-        <DataAnnotationsValidator />
-        <ValidationSummary />
-        <div class="form-group row">
-            <label for="SchoolYearId" class="col-sm-2 col-form-label">
-                Година:
-            </label>
-            <div class="col-sm-10">
-                <CustomInputSelect class="form-control" @bind-Value="this.input.SchoolYearId">
-                    <option value="" disabled>Изберете година...</option>
-                    @foreach (var year in this.years)
-                        {
-                        <option value="@year.Id">@year.Name</option>
-                        }
-                </CustomInputSelect>
-            </div>
-        </div>
-        @if (this.isYearSelected)
-        {
-            <div class="form-group row">
-                <label for="SchoolYearId" class="col-sm-2 col-form-label">
-                    Клас:
-                </label>
-                <div class="col-sm-10">
-                    <InputNumber class="form-control" min="1" max="13" step="1" @bind-Value="this.input.GradeNumber"></InputNumber>
+    <div class="form-container">
+        <div class="small-form-container">
+            <EditForm EditContext="this.editContext" OnSubmit="this.HandleSubmit">
+                <DataAnnotationsValidator />
+                <ValidationSummary />
+                <div class="form-group row">
+                    <label for="SchoolYearId" class="col-sm-2 col-form-label">
+                        Година:
+                    </label>
+                    <div class="col-sm-10">
+                        <CustomInputSelect class="form-control" @bind-Value="this.input.SchoolYearId">
+                            <option value="" disabled>Изберете година...</option>
+                            @foreach (var year in this.years)
+                                {
+                                <option value="@year.Id">@year.Year</option>
+                                }
+                        </CustomInputSelect>
+                    </div>
                 </div>
-            </div>
-        }
-        <button type="submit" class="btn btn-outline-info" disabled="@(!this.isValidInput)">Създай</button>
-    </EditForm>
+                @if (this.isYearSelected)
+                {
+                    <div class="form-group row">
+                        <label for="SchoolYearId" class="col-sm-2 col-form-label">
+                            Клас:
+                        </label>
+                        <div class="col-sm-10">
+                            <InputNumber class="form-control" min="1" max="13" step="1" @bind-Value="this.input.GradeNumber"></InputNumber>
+                        </div>
+                    </div>
+                }
+                <button type="submit" class="btn btn-outline-info" disabled="@(!this.isValidInput)">Създай</button>
+            </EditForm>
+        </div>
+    </div>
 }
 
 @code {

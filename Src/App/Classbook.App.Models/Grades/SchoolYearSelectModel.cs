@@ -3,10 +3,10 @@
     using Classook.Services.Mapping;
     using Classbook.Data.Models;
 
-    public class SchoolYearSelectModel : IMapFrom<Grade>
+    public class SchoolYearSelectModel : IMapFrom<SchoolYear>
     {
         public int Id { get; set; }
 
-        public string Name { get; set; }
+        public string Year { get; set; }
     }
 }

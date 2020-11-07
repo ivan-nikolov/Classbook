@@ -1,0 +1,45 @@
+﻿@page "/subjects/all";
+@inject ISubjectService subjectService;
+@inject IToastService toastService;
+@using Classbook.App.Models.Subjects;
+@using static Classbook.Common.Messages.SubjectMessages; 
+
+@if (this.subjects == null)
+{
+    <p>Зареждам...</p>
+}
+else
+{
+    <table class="table-striped w-100">
+        <thead>
+            <tr><th><h1>Предмет</h1></th></tr>
+        </thead>
+        <tbody>
+            @foreach (var subject in this.subjects)
+            {
+                <tr class="d-flex justify-content-between p-4">
+                    <td>@subject.Name</td>
+                    <td><button class="btn btn-sm btn-danger" @onclick="@(async () => await this.DeleteSubjectAsync(subject.Id))">Изтрий</button></td>
+                </tr>
+
+            }
+        </tbody>
+    </table>
+}
+
+@code {
+    private List<SubjectsViewModel> subjects;
+
+    protected override async Task OnInitializedAsync()
+    {
+        this.subjects = (await this.subjectService.GetAllAsync<SubjectsViewModel>()).ToList();
+        await base.OnInitializedAsync();
+    }
+
+    private async Task DeleteSubjectAsync(int id)
+    {
+        await this.subjectService.DeleteAsync(id);
+        this.subjects.Remove(this.subjects.FirstOrDefault(x => x.Id == id));
+        this.toastService.ShowSuccess(DeletedSuccessfuly);
+    }
+}

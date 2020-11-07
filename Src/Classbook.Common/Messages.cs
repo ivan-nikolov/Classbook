@@ -10,6 +10,8 @@
         public static class SubjectMessages
         {
             public const string CreatedSuccessfuly = "Предметът е създаден успешно.";
+
+            public const string DeletedSuccessfuly = "Предметът е изтрит успешно.";
         }
     }
 }

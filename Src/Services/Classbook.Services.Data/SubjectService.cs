@@ -19,9 +19,19 @@
 
         public async Task CreateAsync<T>(T input)
         {
-            var subject = new Subject();
-            this.context.Entry(subject).CurrentValues.SetValues(input);
-            this.context.Entry(subject).State = EntityState.Added;
+            var subjectToSave = input.To<Subject>();
+            var subjectFromDb = await this.context.Subjects.FirstOrDefaultAsync(x => x.Id == subjectToSave.Id);
+            if (subjectFromDb != null)
+            {
+                subjectFromDb.IsDeleted = false;
+            }
+            else
+            {
+                var subject = new Subject();
+                this.context.Entry(subject).CurrentValues.SetValues(input);
+                this.context.Entry(subject).State = EntityState.Added;
+            }
+
             await this.context.SaveChangesAsync();
         }
 
@@ -42,6 +52,7 @@
 
         public async Task<IEnumerable<T>> GetAllAsync<T>()
             => await this.context.Subjects
+            .Where(x => x.IsDeleted == false)
             .To<T>()
             .ToListAsync();
 
@@ -53,6 +64,6 @@
 
         public async Task<bool> CheckIfSubjectNameExists(string name)
             => await this.context.Subjects
-                .CountAsync(x => x.Name == name) > 0;
+                .CountAsync(x => x.Name == name && x.IsDeleted == false) > 0;
     }
 }
