@@ -1,0 +1,39 @@
+﻿@page "/grades/details/{Id:int}";
+@inject IGradeService gradeService;
+@using Classbook.App.Models.Grades;
+
+
+@if (this.grade == null)
+{
+    <p>Loading...</p>
+}
+else
+{
+    <p>@this.grade.GradeNumber</p>
+
+    if (this.grade.Subjects.Count == 0)
+    {
+        <p>No subjects</p>
+    }
+    else
+    {
+        foreach (var subject in this.grade.Subjects)
+        {
+            <p>@subject.Name</p>
+        }
+    }
+
+}
+
+@code {
+    [Parameter]
+    public int Id { get; set; }
+
+    private GradeDetailsViewModel grade;
+
+    protected override async Task OnInitializedAsync()
+    {
+        this.grade = await this.gradeService.GetByIdAsync<GradeDetailsViewModel>(this.Id);
+        await base.OnInitializedAsync();
+    }
+}

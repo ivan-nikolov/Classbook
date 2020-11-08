@@ -20,7 +20,7 @@
         public async Task CreateAsync<T>(T input)
         {
             var subjectToSave = input.To<Subject>();
-            var subjectFromDb = await this.context.Subjects.FirstOrDefaultAsync(x => x.Id == subjectToSave.Id);
+            var subjectFromDb = await this.context.Subjects.FirstOrDefaultAsync(s => s.Id == subjectToSave.Id && s.IsDeleted == false);
             if (subjectFromDb != null)
             {
                 subjectFromDb.IsDeleted = false;
@@ -37,14 +37,14 @@
 
         public async Task DeleteAsync(int id)
         {
-            var subject = await this.context.Subjects.FirstOrDefaultAsync(x => x.Id == id);
+            var subject = await this.context.Subjects.FirstOrDefaultAsync(s => s.Id == id && s.IsDeleted == false);
             subject.IsDeleted = true;
             await this.context.SaveChangesAsync();
         }
 
         public async Task EditAsync<T>(T input, int id)
         {
-            var subject = await this.context.Subjects.FirstOrDefaultAsync(x => x.Id == id);
+            var subject = await this.context.Subjects.FirstOrDefaultAsync(s => s.Id == id && s.IsDeleted == false);
             this.context.Entry(subject).CurrentValues.SetValues(input);
             this.context.Entry(subject).State = EntityState.Modified;
             await this.context.SaveChangesAsync();
@@ -52,13 +52,13 @@
 
         public async Task<IEnumerable<T>> GetAllAsync<T>()
             => await this.context.Subjects
-            .Where(x => x.IsDeleted == false)
+            .Where(s => s.IsDeleted == false)
             .To<T>()
             .ToListAsync();
 
         public async Task<T> GetByIdAsync<T>(int id)
             => await this.context.Subjects
-            .Where(x => x.Id == id)
+            .Where(s => s.Id == id)
             .To<T>()
             .FirstOrDefaultAsync();
 

@@ -23,7 +23,7 @@
 
         public async Task<IEnumerable<T>> AllByYearIdAsync<T>(int yearId)
            => await this.context.Grades
-            .Where(g => g.SchoolYearId == yearId)
+            .Where(g => g.SchoolYearId == yearId && g.IsDeleted == false)
             .To<T>()
             .ToListAsync();
             
@@ -60,7 +60,7 @@
             .FirstOrDefaultAsync();
 
         public async Task<bool> GradeExistsForSchoolYearAsync(int yearId, int gradeNumber)
-            => await this.context.Grades.FirstOrDefaultAsync(g => g.GradeNumber == gradeNumber && g.SchoolYearId == yearId) != null;
+            => await this.context.Grades.FirstOrDefaultAsync(g => g.GradeNumber == gradeNumber && g.SchoolYearId == yearId && g.IsDeleted == false) != null;
 
         public async Task RestoreAsync(int id)
         {
