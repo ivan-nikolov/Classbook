@@ -8,6 +8,8 @@
 
     public class GradeDetailsViewModel : IMapFrom<Grade>
     {
+        public int Id { get; set; }
+
         public int GradeNumber { get; set; }
 
         public ICollection<GradeSubjectViewModel> Subjects = new HashSet<GradeSubjectViewModel>();

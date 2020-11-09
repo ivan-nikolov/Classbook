@@ -61,6 +61,7 @@ namespace Classbook.App
             services.AddTransient<ISchoolYearService, SchoolYearService>();
             services.AddTransient<IGradeService, GradeService>();
             services.AddTransient<ISubjectService, SubjectService>();
+            services.AddTransient<IGradeClassService, GradeClassService>();
 
             services.AddScoped<AuthenticationStateProvider, RevalidatingIdentityAuthenticationStateProvider<IdentityUser>>();
             services.AddScoped<IToastService, ToastService>();

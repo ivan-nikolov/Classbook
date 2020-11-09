@@ -29,5 +29,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Components\Common\ToastNotifications\" />
+    <Folder Include="Pages\GradeClasses\" />
   </ItemGroup>
 </Project>

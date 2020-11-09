@@ -1,0 +1,102 @@
+﻿@inject Classbook.Services.Data.ISubjectService subjectService;
+@inject IModalService modalService;
+@using Classbook.App.Models.Subjects;
+@using Classbook.App.Components.Utitlity;
+
+<button class="btn btn-outline-info" @onclick="this.ToggleForms">@this.toggleButtonText</button>
+
+@if (this.showDropdown)
+{
+    <div class="form-container">
+        <div class="small-form-container">
+            <EditForm class="d-flex flex-column" Model="this.subjectId" OnValidSubmit="@(() => this.SelectSubject())">
+                <div class="form-group row">
+                    <label for="SchoolYearId" class="col-sm-2 col-form-label">
+                        Предмет:
+                    </label>
+                    <div class="col-sm-12">
+                        <CustomInputSelect class="form-control" @bind-Value="this.subjectId.Id">
+                            @foreach (var subject in this.subjects)
+                                {
+                                <option value="@subject.Id">@subject.Name</option>
+                                }
+                        </CustomInputSelect>
+                    </div>
+                </div>
+
+                <button class="btn btn-outline-primary" type="submit">Добави</button>
+            </EditForm>
+        </div>
+    </div>
+}
+else
+{
+    <Classbook.App.Pages.Subjects.Create OnSubjectCreated="this.SelectCreatedSubject">
+
+    </Classbook.App.Pages.Subjects.Create>
+}
+
+@code {
+    private bool showDropdown = true;
+    private const string NewSubjectButtonText = "Създай нов";
+    private const string SelectSubjectBtnText = "Издери съществуващ";
+    private string toggleButtonText = NewSubjectButtonText;
+
+    private SubjectIdInputModel subjectId;
+    private int gradeId;
+
+    private List<AddSubjectToGradeViewModel> subjects;
+
+    [CascadingParameter]
+    public ModalParameters Parameters { get; set; }
+
+    [CascadingParameter]
+    public BlazoredModal BlazoredModal { get; set; }
+
+    bool ShowForm { get; set; } = true;
+    int FormId { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        this.gradeId = this.Parameters.TryGet<int>("gradeId");
+        this.subjects = (await this.subjectService.GetAllAsync<AddSubjectToGradeViewModel>()).ToList();
+        this.subjectId = new SubjectIdInputModel()
+        {
+            Id = subjects.FirstOrDefault().Id
+        };
+        this.FormId = this.Parameters.Get<int>("FormId");
+        this.BlazoredModal.SetTitle("Добавяне на предмет");
+        await base.OnInitializedAsync();
+    }
+
+    private void Done()
+    {
+        this.modalService.Close(ModalResult.Ok("Form submitted"));
+    }
+
+    private void Cancel()
+    {
+        this.modalService.Cancel();
+    }
+
+    private async Task SelectSubject()
+    {
+        if (await this.subjectService.CheckIfSubjectExists(this.subjectId.Id))
+        {
+            await this.subjectService.AddGradeAsync(this.subjectId.Id, this.gradeId);
+            this.Done();
+        }
+    }
+
+    private async Task SelectCreatedSubject(int subjectId)
+    {
+        await this.subjectService.AddGradeAsync(subjectId, this.gradeId);
+        this.Done();
+    }
+
+    private void ToggleForms()
+    {
+        this.showDropdown = !this.showDropdown;
+        this.toggleButtonText = this.showDropdown ? NewSubjectButtonText : SelectSubjectBtnText;
+    }
+}

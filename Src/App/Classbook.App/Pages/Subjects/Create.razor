@@ -32,6 +32,9 @@
     private CreateSubjectInputModel input;
     private EditContext editContext;
 
+    [Parameter]
+    public EventCallback<int> OnSubjectCreated { get; set; }
+
     protected override void OnInitialized()
     {
         this.input = new CreateSubjectInputModel();
@@ -45,9 +48,16 @@
 
         if (isValid)
         {
-            await this.subjectSurvice.CreateAsync<CreateSubjectInputModel>(this.input);
-            this.toastService.ShowSuccess(CreatedSuccessfuly);
-            this.navManager.NavigateTo("/subjects/all", false);
+            var subjectId = await this.subjectSurvice.CreateAsync<CreateSubjectInputModel>(this.input);
+            this.toastService.ShowSuccess(CreatedSuccessfulyMessage);
+            if (this.OnSubjectCreated.HasDelegate)
+            {
+                await this.OnSubjectCreated.InvokeAsync(subjectId);
+            }
+            else
+            {
+                this.navManager.NavigateTo("/subjects/all", false);
+            }
         }
         else
         {

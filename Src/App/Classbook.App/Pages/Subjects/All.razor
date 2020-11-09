@@ -40,6 +40,6 @@ else
     {
         await this.subjectService.DeleteAsync(id);
         this.subjects.Remove(this.subjects.FirstOrDefault(x => x.Id == id));
-        this.toastService.ShowSuccess(DeletedSuccessfuly);
+        this.toastService.ShowSuccess(DeletedSuccessfulyMessage);
     }
 }

@@ -4,14 +4,16 @@
     {
         public static class GradeMessages
         {
-            public const string CreatedSuccessfuly = "Класът е успешно създаден.";
+            public const string CreatedSuccessfulyMessage = "Класът е успешно създаден.";
+
+            public const string SubjectAddedSuccessfulyMessage = "Предметът е добавен успешно";
         }
 
         public static class SubjectMessages
         {
-            public const string CreatedSuccessfuly = "Предметът е създаден успешно.";
+            public const string CreatedSuccessfulyMessage = "Предметът е създаден успешно.";
 
-            public const string DeletedSuccessfuly = "Предметът е изтрит успешно.";
+            public const string DeletedSuccessfulyMessage = "Предметът е изтрит успешно.";
         }
     }
 }

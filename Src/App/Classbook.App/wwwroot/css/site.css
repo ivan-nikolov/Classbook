@@ -1,4 +1,5 @@
 @import url('open-iconic/font/css/open-iconic-bootstrap.min.css');
+@import url(Loader.css);
 
 html, body {
     font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
@@ -139,7 +140,6 @@ app {
 .form-container {
     display:flex;
     min-width: 100%;
-    min-height: 100vh;
     justify-content: center;
 }
 

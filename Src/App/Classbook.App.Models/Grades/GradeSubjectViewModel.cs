@@ -6,7 +6,7 @@
 
     using Classook.Services.Mapping;
 
-    public class GradeSubjectViewModel : IMapFrom<GradeSubject>, IHaveCustomMappings
+    public class GradeSubjectViewModel : IMapFrom<Subject>, IHaveCustomMappings
     {
         public int Id { get; set; }
 

@@ -125,7 +125,7 @@ else
             };
 
             await this.gradeService.CreateAsync(dto);
-            this.ToastService.ShowSuccess(CreatedSuccessfuly);
+            this.ToastService.ShowSuccess(CreatedSuccessfulyMessage);
 
             this.navManager.NavigateTo($"/years/details/{this.input.SchoolYearId}", false);
         }

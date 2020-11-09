@@ -1,19 +1,25 @@
 ﻿@page "/grades/details/{Id:int}";
 @inject IGradeService gradeService;
+@inject ISubjectService subjectService;
+@inject IModalService modalService;
+@inject IToastService toastService;
 @using Classbook.App.Models.Grades;
+@using static Classbook.Common.Messages.GradeMessages; 
 
+
+<BlazoredModal />
 
 @if (this.grade == null)
 {
-    <p>Loading...</p>
+    <Loader></Loader>
 }
 else
 {
-    <p>@this.grade.GradeNumber</p>
+    <h2>@this.grade.GradeNumber</h2>
 
     if (this.grade.Subjects.Count == 0)
     {
-        <p>No subjects</p>
+        <p>Няма предмети за текущата година.</p>
     }
     else
     {
@@ -23,6 +29,7 @@ else
         }
     }
 
+    <button class="btn btn-outline-primary" @onclick="@(() => this.ShowModal(this.Id))">Добави предмет</button>
 }
 
 @code {
@@ -35,5 +42,36 @@ else
     {
         this.grade = await this.gradeService.GetByIdAsync<GradeDetailsViewModel>(this.Id);
         await base.OnInitializedAsync();
+    }
+
+    private void ShowModal(int gradeId)
+    {
+        var parameters = new ModalParameters();
+        parameters.Add("FormId", 1);
+        parameters.Add("gradeId", gradeId);
+        var options = new ModalOptions()
+        {
+            Position = "blazored-modal-topleft",
+        };
+
+        this.modalService.OnClose += this.ModalClosed;
+        this.modalService.OnClose += this.UpdateSubjects;
+        this.modalService.Show<AddSubject>("Добавяне на предмет", parameters, options);
+    }
+
+    private void ModalClosed(object sender, ModalResult modalResult)
+    {
+        this.modalService.OnClose -= this.ModalClosed;
+        this.modalService.OnClose -= this.UpdateSubjects;
+    }
+
+    private async void UpdateSubjects(object sender, ModalResult modalResult = null)
+    {
+        if (!modalResult.Cancelled)
+        {
+            this.grade.Subjects = (await this.subjectService.GetByGradeIdAsync<GradeSubjectViewModel>(this.grade.Id)).ToList();
+            this.StateHasChanged();
+            this.toastService.ShowSuccess(SubjectAddedSuccessfulyMessage);
+        }
     }
 }

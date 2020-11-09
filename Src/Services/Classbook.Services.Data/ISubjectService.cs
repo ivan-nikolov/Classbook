@@ -5,7 +5,13 @@
 
     public interface ISubjectService
     {
-        Task CreateAsync<T>(T input);
+        Task AddGradeAsync(int id, int gradeId);
+
+        Task<bool> CheckIfSubjectExists(int id);
+
+        Task<bool> CheckIfSubjectNameExists(string name);
+
+        Task<int> CreateAsync<T>(T input);
 
         Task EditAsync<T>(T input, int id);
 
@@ -13,8 +19,8 @@
 
         Task<T> GetByIdAsync<T>(int id);
 
-        Task<IEnumerable<T>> GetAllAsync<T>();
+        Task<IEnumerable<T>> GetByGradeIdAsync<T>(int gradeId);
 
-        Task<bool> CheckIfSubjectNameExists(string name);
+        Task<IEnumerable<T>> GetAllAsync<T>();
     }
 }
