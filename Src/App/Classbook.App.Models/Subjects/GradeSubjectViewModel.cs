@@ -1,4 +1,4 @@
-﻿namespace Classbook.App.Models.Grades
+﻿namespace Classbook.App.Models.Subjects
 {
     using AutoMapper;
 
@@ -17,7 +17,7 @@
             configuration.CreateMap<GradeSubject, GradeSubjectViewModel>()
                 .ForMember(x => x.Name, e => e.MapFrom(y => y.Subject.Name))
                 .ForMember(x => x.Id, e => e.MapFrom(y => y.Subject.Id));
-               
+
         }
     }
 }

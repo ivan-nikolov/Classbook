@@ -49,6 +49,8 @@
         public async Task DeleteAsync(int id)
         {
             var grade = await this.context.Grades.FirstOrDefaultAsync(g => g.Id == id);
+            var gradeSubjects = this.context.GradeSubjects.Where(x => x.GradeId == id);
+            this.context.GradeSubjects.RemoveRange(gradeSubjects);
             this.context.Grades.Remove(grade);
             await this.context.SaveChangesAsync();
         }

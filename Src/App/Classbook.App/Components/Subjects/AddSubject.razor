@@ -1,15 +1,26 @@
 ﻿@inject Classbook.Services.Data.ISubjectService subjectService;
 @inject IModalService modalService;
+@inject IToastService toastService;
 @using Classbook.App.Models.Subjects;
 @using Classbook.App.Components.Utitlity;
 
-<button class="btn btn-outline-info" @onclick="this.ToggleForms">@this.toggleButtonText</button>
+<ul class="nav nav-tabs">
+    <li class="nav-item">
+        <a class="nav-link @this.FirstTabActive" @onclick="@this.ToggleForms">@SelectSubjectBtnText</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link @this.SecondTabActive" @onclick="this.ToggleForms">@NewSubjectBtnText</a>
+    </li>
+</ul>
 
 @if (this.showDropdown)
 {
     <div class="form-container">
         <div class="small-form-container">
             <EditForm class="d-flex flex-column" Model="this.subjectId" OnValidSubmit="@(() => this.SelectSubject())">
+                <DataAnnotationsValidator />
+                <ValidationSummary />
+
                 <div class="form-group row">
                     <label for="SchoolYearId" class="col-sm-2 col-form-label">
                         Предмет:
@@ -38,9 +49,10 @@ else
 
 @code {
     private bool showDropdown = true;
-    private const string NewSubjectButtonText = "Създай нов";
+    private string FirstTabActive = "active";
+    private string SecondTabActive = "";
+    private const string NewSubjectBtnText = "Създай нов";
     private const string SelectSubjectBtnText = "Издери съществуващ";
-    private string toggleButtonText = NewSubjectButtonText;
 
     private SubjectIdInputModel subjectId;
     private int gradeId;
@@ -59,11 +71,20 @@ else
     protected override async Task OnInitializedAsync()
     {
         this.gradeId = this.Parameters.TryGet<int>("gradeId");
-        this.subjects = (await this.subjectService.GetAllAsync<AddSubjectToGradeViewModel>()).ToList();
+
+        Func<AddSubjectToGradeViewModel, bool> expression = x => !x.Grades.Any(g => g.GradeId == this.gradeId);
+
+        this.subjects = this.subjectService.GetAll<AddSubjectToGradeViewModel>(expression).ToList();
         this.subjectId = new SubjectIdInputModel()
         {
-            Id = subjects.FirstOrDefault().Id
+            Id = subjects.FirstOrDefault()?.Id ?? default
         };
+
+        if (this.subjects.Count == 0)
+        {
+            this.ToggleForms();
+        }
+
         this.FormId = this.Parameters.Get<int>("FormId");
         this.BlazoredModal.SetTitle("Добавяне на предмет");
         await base.OnInitializedAsync();
@@ -81,10 +102,14 @@ else
 
     private async Task SelectSubject()
     {
-        if (await this.subjectService.CheckIfSubjectExists(this.subjectId.Id))
+        if (!await this.SelectSubjectServiveValidate())
         {
             await this.subjectService.AddGradeAsync(this.subjectId.Id, this.gradeId);
             this.Done();
+        }
+        else
+        {
+            this.toastService.ShowError(ValidationsMessages.SubjectMessages.SubjectExistsForGrade);
         }
     }
 
@@ -97,6 +122,18 @@ else
     private void ToggleForms()
     {
         this.showDropdown = !this.showDropdown;
-        this.toggleButtonText = this.showDropdown ? NewSubjectButtonText : SelectSubjectBtnText;
+        if (this.showDropdown)
+        {
+            this.FirstTabActive = "active";
+            this.SecondTabActive = "";
+        }
+        else
+        {
+            this.FirstTabActive = "";
+            this.SecondTabActive = "active";
+        }
     }
+
+    private async Task<bool> SelectSubjectServiveValidate()
+        => await this.subjectService.CheckIfSubjectExistsForGrade(this.subjectId.Id, this.gradeId);
 }

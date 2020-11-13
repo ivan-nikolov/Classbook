@@ -294,7 +294,7 @@ namespace Classbook.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "GradeSubject",
+                name: "GradeSubjects",
                 columns: table => new
                 {
                     GradeId = table.Column<int>(nullable: false),
@@ -302,15 +302,15 @@ namespace Classbook.Data.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_GradeSubject", x => new { x.GradeId, x.SubjectId });
+                    table.PrimaryKey("PK_GradeSubjects", x => new { x.GradeId, x.SubjectId });
                     table.ForeignKey(
-                        name: "FK_GradeSubject_Grades_GradeId",
+                        name: "FK_GradeSubjects_Grades_GradeId",
                         column: x => x.GradeId,
                         principalTable: "Grades",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_GradeSubject_Subjects_SubjectId",
+                        name: "FK_GradeSubjects_Subjects_SubjectId",
                         column: x => x.SubjectId,
                         principalTable: "Subjects",
                         principalColumn: "Id",
@@ -348,9 +348,9 @@ namespace Classbook.Data.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Marks_GradeSubject_GradeId_SubjectId",
+                        name: "FK_Marks_GradeSubjects_GradeId_SubjectId",
                         columns: x => new { x.GradeId, x.SubjectId },
-                        principalTable: "GradeSubject",
+                        principalTable: "GradeSubjects",
                         principalColumns: new[] { "GradeId", "SubjectId" },
                         onDelete: ReferentialAction.Restrict);
                 });
@@ -433,8 +433,8 @@ namespace Classbook.Data.Migrations
                 column: "SchoolYearId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_GradeSubject_SubjectId",
-                table: "GradeSubject",
+                name: "IX_GradeSubjects_SubjectId",
+                table: "GradeSubjects",
                 column: "SubjectId");
 
             migrationBuilder.CreateIndex(
@@ -506,7 +506,7 @@ namespace Classbook.Data.Migrations
                 name: "Students");
 
             migrationBuilder.DropTable(
-                name: "GradeSubject");
+                name: "GradeSubjects");
 
             migrationBuilder.DropTable(
                 name: "GradeClasses");

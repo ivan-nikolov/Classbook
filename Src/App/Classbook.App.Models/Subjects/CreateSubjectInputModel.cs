@@ -9,8 +9,8 @@
 
     public class CreateSubjectInputModel : IMapTo<Subject>
     {
-        [Required]
-        [StringLength(60, MinimumLength = 1, ErrorMessage = ValidationsMessages.SchoolYearMessages.YearLeghtErrorMessage)]
+        [Required(ErrorMessage = ValidationsMessages.SubjectMessages.NameRequiredErrorMessage)]
+        [StringLength(60, MinimumLength = 1, ErrorMessage = ValidationsMessages.SubjectMessages.NameLengthErrorMessage)]
         public string Name { get; set; }
     }
 }

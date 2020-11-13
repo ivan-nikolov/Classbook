@@ -38,7 +38,7 @@ namespace Classbook.App
         {
             services.AddDbContext<ClassbookDbContext>(options =>
                 options.UseSqlite(
-                    Configuration.GetConnectionString("DefaultConnection")));
+                    Configuration.GetConnectionString("DefaultConnection")).EnableSensitiveDataLogging());
 
             services.AddDefaultIdentity<ApplicationUser>(options => IdentityOptionsProvider.GetIdentityOptions(options))
                 .AddRoles<ApplicationRole>()

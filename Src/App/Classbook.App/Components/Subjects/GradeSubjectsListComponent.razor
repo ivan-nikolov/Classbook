@@ -1,0 +1,65 @@
+﻿@inject IModalService modalService;
+@inject IToastService toastService;
+@inject Classbook.Services.Data.ISubjectService subjectService;
+@using Classbook.App.Models.Subjects;
+@using static Classbook.Common.Messages.SubjectMessages;
+
+<h2>Учебни предмети</h2>
+
+@if (this.subjects.Count == 0)
+{
+    <p>Няма предмети за текущата година.</p>
+}
+else
+{
+    foreach (var subject in this.subjects)
+    {
+        <p>@subject.Name</p>
+    }
+}
+<button class="btn btn-outline-info mr-2" @onclick="@(() => this.ShowAddSubjectModal(this.GradeId))">Добави предмет</button>
+@code {
+
+    private List<GradeSubjectViewModel> subjects;
+
+    [Parameter]
+    public int GradeId { get; set; }
+
+    protected async override Task OnInitializedAsync()
+    {
+        this.subjects = (await this.subjectService.GetByGradeIdAsync<GradeSubjectViewModel>(this.GradeId)).ToList();
+
+        await base.OnInitializedAsync();
+    }
+
+    private void ShowAddSubjectModal(int gradeId)
+    {
+        var parameters = new ModalParameters();
+        parameters.Add("FormId", 1);
+        parameters.Add("gradeId", gradeId);
+        var options = new ModalOptions()
+        {
+            Position = "blazored-modal-topleft",
+        };
+
+        this.modalService.OnClose += this.AddSubjectModalClosed;
+        this.modalService.OnClose += this.UpdateSubjects;
+        this.modalService.Show<AddSubject>("Добавяне на предмет", parameters, options);
+    }
+
+    private void AddSubjectModalClosed(object sender, ModalResult modalResult)
+    {
+        this.modalService.OnClose -= this.AddSubjectModalClosed;
+        this.modalService.OnClose -= this.UpdateSubjects;
+    }
+
+    private async void UpdateSubjects(object sender, ModalResult modalResult = null)
+    {
+        if (!modalResult.Cancelled)
+        {
+            this.subjects = (await this.subjectService.GetByGradeIdAsync<GradeSubjectViewModel>(this.GradeId)).ToList();
+            this.StateHasChanged();
+            this.toastService.ShowSuccess(SubjectAddedSuccessfulyMessage);
+        }
+    }
+}

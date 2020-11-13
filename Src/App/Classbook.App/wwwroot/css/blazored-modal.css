@@ -30,11 +30,23 @@
     border: 1px solid #fff;
     padding: 1.5rem;
     z-index: 4;
+    /*background-color: transparent;
+    color: white;*/
 }
+
+/*    .blazored-modal .form-container {
+        width: 100%;
+    }
+
+.blazored-modal .small-form-container {
+    background-color: white;
+    width: auto;
+    color: black;
+}*/
 
 .blazored-modal-header {
     display: flex;
-    align-items: flex-start;
+    align-items: center;
     justify-content: space-between;
     padding: 0 0 2rem 0;
 }

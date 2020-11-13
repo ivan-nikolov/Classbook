@@ -1,13 +1,19 @@
 ﻿namespace Classbook.Services.Data
 {
+    using System;
     using System.Collections.Generic;
+    using System.Linq.Expressions;
     using System.Threading.Tasks;
+
+    using Classbook.Data.Models;
 
     public interface ISubjectService
     {
         Task AddGradeAsync(int id, int gradeId);
 
         Task<bool> CheckIfSubjectExists(int id);
+
+        Task<bool> CheckIfSubjectExistsForGrade(int subjectId, int gradeId);
 
         Task<bool> CheckIfSubjectNameExists(string name);
 
@@ -21,6 +27,6 @@
 
         Task<IEnumerable<T>> GetByGradeIdAsync<T>(int gradeId);
 
-        Task<IEnumerable<T>> GetAllAsync<T>();
+        IEnumerable<T> GetAll<T>(Func<T, bool> expression = null);
     }
 }

@@ -32,7 +32,7 @@ else
 
     protected override async Task OnInitializedAsync()
     {
-        this.subjects = (await this.subjectService.GetAllAsync<SubjectsViewModel>()).ToList();
+        this.subjects = this.subjectService.GetAll<SubjectsViewModel>().ToList();
         await base.OnInitializedAsync();
     }
 

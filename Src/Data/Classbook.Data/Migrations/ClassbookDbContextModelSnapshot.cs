@@ -14,7 +14,7 @@ namespace Classbook.Data.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "3.1.6");
+                .HasAnnotation("ProductVersion", "3.1.8");
 
             modelBuilder.Entity("Classbook.Data.Models.ApplicationRole", b =>
                 {
@@ -222,7 +222,7 @@ namespace Classbook.Data.Migrations
 
                     b.HasIndex("SubjectId");
 
-                    b.ToTable("GradeSubject");
+                    b.ToTable("GradeSubjects");
                 });
 
             modelBuilder.Entity("Classbook.Data.Models.Mark", b =>

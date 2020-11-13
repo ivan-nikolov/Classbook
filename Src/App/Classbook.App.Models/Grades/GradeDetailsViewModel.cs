@@ -2,6 +2,7 @@
 {
     using System.Collections.Generic;
 
+    using Classbook.App.Models.Subjects;
     using Classbook.Data.Models;
 
     using Classook.Services.Mapping;
@@ -11,7 +12,5 @@
         public int Id { get; set; }
 
         public int GradeNumber { get; set; }
-
-        public ICollection<GradeSubjectViewModel> Subjects = new HashSet<GradeSubjectViewModel>();
     }
 }

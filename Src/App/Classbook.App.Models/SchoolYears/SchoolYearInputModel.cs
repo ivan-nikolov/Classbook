@@ -6,7 +6,7 @@
 
     public class SchoolYearInputModel
     {
-        [Required]
+        [Required(ErrorMessage = YearRequiredMessage)]
         [MaxLength(50, ErrorMessage = YearLeghtErrorMessage)]
         public string Year { get; set; }
     }

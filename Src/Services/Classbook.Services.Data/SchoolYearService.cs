@@ -23,7 +23,7 @@
 
         public async Task<IEnumerable<T>> AllByUserIdAsync<T>(string userId, bool isArchived = false)
         {
-            var result = this.context.SchoolYears.Where(sy => sy.UserId == userId && sy.IsDeleted == false)
+            var result = this.context.SchoolYears.Where(sy => sy.UserId == userId)
                 .AsQueryable();
             if(isArchived == true)
             {

@@ -9,14 +9,14 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Classbook.Data.Migrations
 {
     [DbContext(typeof(ClassbookDbContext))]
-    [Migration("20200817123012_InitialCreate")]
+    [Migration("20201112132840_InitialCreate")]
     partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "3.1.6");
+                .HasAnnotation("ProductVersion", "3.1.8");
 
             modelBuilder.Entity("Classbook.Data.Models.ApplicationRole", b =>
                 {
@@ -224,7 +224,7 @@ namespace Classbook.Data.Migrations
 
                     b.HasIndex("SubjectId");
 
-                    b.ToTable("GradeSubject");
+                    b.ToTable("GradeSubjects");
                 });
 
             modelBuilder.Entity("Classbook.Data.Models.Mark", b =>

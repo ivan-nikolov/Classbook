@@ -5,19 +5,23 @@
 
 @if (this.ShowForm)
 {
-<EditForm Model="input" OnValidSubmit="this.HandleValidSubmit">
-    <div class="form-group row align-items-stretch">
-        <label for="year" class="col">
-            Учебна година:
-        </label>
-        <div class="col-6">
-            <InputText id="year" name="year" @bind-Value="input.Year"  autofocus/>
-        </div>
-        <div class="col">
-            <button class="btn btn-success" type="submit">Редактирай</button>
+    <div class="form-container">
+        <div class="small-form-container">
+            <EditForm Model="input" OnValidSubmit="this.HandleValidSubmit">
+                <div class="form-group col justify-content-between align-items-stretch">
+                    <label for="year" class="col mb-4">
+                        Учебна година:
+                    </label>
+                    <div class="col-6 mb-4">
+                        <InputText id="year" name="year" @bind-Value="input.Year" autofocus />
+                    </div>
+                    <div class="col mb-4">
+                        <button class="btn btn-success" type="submit">Редактирай</button>
+                    </div>
+                </div>
+            </EditForm>
         </div>
     </div>
-</EditForm>
 }
 else
 {

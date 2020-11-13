@@ -1,5 +1,6 @@
 ﻿namespace Classbook.Services.Data
 {
+    using System;
     using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
@@ -33,6 +34,11 @@
             => await this.context.Subjects
             .CountAsync(s => s.Id == id && s.IsDeleted == false) > 0;
 
+        public async Task<bool> CheckIfSubjectExistsForGrade(int subjectId, int gradeId)
+            => await this.context.Subjects
+            .AnyAsync(s => s.Grades.Any(g => g.SubjectId == subjectId && g.GradeId == gradeId));
+            
+
         public async Task<bool> CheckIfSubjectNameExists(string name)
             => await this.context.Subjects
                 .CountAsync(x => x.Name == name && x.IsDeleted == false) > 0;
@@ -40,7 +46,7 @@
         public async Task<int> CreateAsync<T>(T input)
         {
             var subjectToSave = input.To<Subject>();
-            var subject = await this.context.Subjects.FirstOrDefaultAsync(s => s.Id == subjectToSave.Id && s.IsDeleted == true);
+            var subject = await this.context.Subjects.FirstOrDefaultAsync(s => s.Name == subjectToSave.Name && s.IsDeleted == true);
             if (subject != null)
             {
                 subject.IsDeleted = false;
@@ -60,6 +66,11 @@
         {
             var subject = await this.context.Subjects.FirstOrDefaultAsync(s => s.Id == id && s.IsDeleted == false);
             subject.IsDeleted = true;
+
+            var gradeSubjects = this.context.GradeSubjects.Where(x => x.SubjectId == id);
+
+            this.context.GradeSubjects.RemoveRange(gradeSubjects);
+            
             await this.context.SaveChangesAsync();
         }
 
@@ -71,11 +82,23 @@
             await this.context.SaveChangesAsync();
         }
 
-        public async Task<IEnumerable<T>> GetAllAsync<T>()
-            => await this.context.Subjects
-            .Where(s => s.IsDeleted == false)
-            .To<T>()
-            .ToListAsync();
+        public IEnumerable<T> GetAll<T>(Func<T, bool> expression = null)
+        {
+            var subjects = this.context.Subjects
+                .Where(s => s.IsDeleted == false)
+                .To<T>();
+
+            if (expression != null)
+            {
+                return subjects.Where(expression);
+            }
+
+            return subjects.ToList();
+        }
+            //=> await this.context.Subjects
+            //.Where(s => s.IsDeleted == false)
+            //.To<T>()
+            //.ToListAsync();
 
         public async Task<IEnumerable<T>> GetByGradeIdAsync<T>(int gradeId)
             => await this.context.Subjects
@@ -88,6 +111,5 @@
             .Where(s => s.Id == id)
             .To<T>()
             .FirstOrDefaultAsync();
-
     }
 }
