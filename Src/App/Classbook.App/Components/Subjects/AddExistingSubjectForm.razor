@@ -1,0 +1,61 @@
+﻿@inject Classbook.Services.Data.ISubjectService subjectService;
+@inject IToastService toastService;
+@using Classbook.App.Models.Subjects;
+@using Classbook.App.Components.Utitlity;
+
+<div class="form-container">
+    <div class="small-form-container">
+        <EditForm class="d-flex flex-column" Model="this.subjectId" OnValidSubmit="@(() => this.SelectSubject())">
+            <DataAnnotationsValidator />
+            <ValidationSummary />
+
+            <div class="form-group row">
+                <label for="SchoolYearId" class="col-sm-2 col-form-label">
+                    Предмет:
+                </label>
+                <div class="col-sm-12">
+                    <CustomInputSelect class="form-control" @bind-Value="this.subjectId.Id">
+                        @foreach (var subject in this.subjects)
+                        {
+                            <option value="@subject.Id">@subject.Name</option>
+                        }
+                    </CustomInputSelect>
+                </div>
+            </div>
+
+            <button class="btn btn-outline-primary" type="submit">Добави</button>
+        </EditForm>
+    </div>
+</div>
+
+@code {
+    [Parameter]
+    public int GradeId { get; set; }
+
+    [Parameter]
+    public EventCallback<int> OnSubjectSelect { get; set; }
+
+    private List<AddSubjectToGradeViewModel> subjects;
+    private SubjectIdInputModel subjectId;
+
+    protected override async Task OnInitializedAsync()
+    {
+        Func<AddSubjectToGradeViewModel, bool> expression = x => !x.Grades.Any(g => g.GradeId == this.GradeId);
+
+        this.subjects = this.subjectService.GetAll<AddSubjectToGradeViewModel>(expression).ToList();
+        this.subjectId = new SubjectIdInputModel()
+        {
+            Id = subjects.FirstOrDefault()?.Id ?? default
+        };
+
+        await base.OnInitializedAsync();
+    }
+
+    private async Task SelectSubject()
+    {
+        if (this.OnSubjectSelect.HasDelegate)
+        {
+            await this.OnSubjectSelect.InvokeAsync(this.subjectId.Id);
+        }
+    }
+}

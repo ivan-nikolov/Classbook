@@ -4,6 +4,7 @@
 @inject IToastService toastService;
 @using Classbook.App.Models.Grades;
 @using Classbook.App.Components.Subjects;
+@using Classbook.App.Components.GradeClasses;
 
 
 <BlazoredModal />
@@ -22,12 +23,12 @@ else
     </section>
 
     <section class="even-section">
-        <button class="btn btn-outline-info">
-            Добави Паралелка
-        </button>
+        <CascadingValue Value="this.Id" Name="GradeId">
+            <GradeClassListComponent></GradeClassListComponent>
+        </CascadingValue>
     </section>
 
-    
+
 }
 
 @code {

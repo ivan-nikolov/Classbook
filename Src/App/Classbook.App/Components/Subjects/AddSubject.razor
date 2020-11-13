@@ -2,57 +2,21 @@
 @inject IModalService modalService;
 @inject IToastService toastService;
 @using Classbook.App.Models.Subjects;
-@using Classbook.App.Components.Utitlity;
 
-<ul class="nav nav-tabs">
-    <li class="nav-item">
-        <a class="nav-link @this.FirstTabActive" @onclick="@this.ToggleForms">@SelectSubjectBtnText</a>
-    </li>
-    <li class="nav-item">
-        <a class="nav-link @this.SecondTabActive" @onclick="this.ToggleForms">@NewSubjectBtnText</a>
-    </li>
-</ul>
+<TabControl>
+    <TabPage ButtonText="Избери съществуващ">
+        <AddExistingSubjectForm GradeId="this.gradeId" OnSubjectSelect="this.SelectSubject">
 
-@if (this.showDropdown)
-{
-    <div class="form-container">
-        <div class="small-form-container">
-            <EditForm class="d-flex flex-column" Model="this.subjectId" OnValidSubmit="@(() => this.SelectSubject())">
-                <DataAnnotationsValidator />
-                <ValidationSummary />
+        </AddExistingSubjectForm>
+    </TabPage>
+    <TabPage ButtonText="Създай нов">
+        <Classbook.App.Pages.Subjects.Create OnSubjectCreated="this.SelectCreatedSubject">
 
-                <div class="form-group row">
-                    <label for="SchoolYearId" class="col-sm-2 col-form-label">
-                        Предмет:
-                    </label>
-                    <div class="col-sm-12">
-                        <CustomInputSelect class="form-control" @bind-Value="this.subjectId.Id">
-                            @foreach (var subject in this.subjects)
-                                {
-                                <option value="@subject.Id">@subject.Name</option>
-                                }
-                        </CustomInputSelect>
-                    </div>
-                </div>
-
-                <button class="btn btn-outline-primary" type="submit">Добави</button>
-            </EditForm>
-        </div>
-    </div>
-}
-else
-{
-    <Classbook.App.Pages.Subjects.Create OnSubjectCreated="this.SelectCreatedSubject">
-
-    </Classbook.App.Pages.Subjects.Create>
-}
+        </Classbook.App.Pages.Subjects.Create>
+    </TabPage>
+</TabControl>
 
 @code {
-    private bool showDropdown = true;
-    private string FirstTabActive = "active";
-    private string SecondTabActive = "";
-    private const string NewSubjectBtnText = "Създай нов";
-    private const string SelectSubjectBtnText = "Издери съществуващ";
 
     private SubjectIdInputModel subjectId;
     private int gradeId;
@@ -80,10 +44,6 @@ else
             Id = subjects.FirstOrDefault()?.Id ?? default
         };
 
-        if (this.subjects.Count == 0)
-        {
-            this.ToggleForms();
-        }
 
         this.FormId = this.Parameters.Get<int>("FormId");
         this.BlazoredModal.SetTitle("Добавяне на предмет");
@@ -100,9 +60,9 @@ else
         this.modalService.Cancel();
     }
 
-    private async Task SelectSubject()
+    private async Task SelectSubject(int subjectId)
     {
-        if (!await this.SelectSubjectServiveValidate())
+        if (!await this.SelectSubjectServiveValidate(subjectId))
         {
             await this.subjectService.AddGradeAsync(this.subjectId.Id, this.gradeId);
             this.Done();
@@ -119,21 +79,6 @@ else
         this.Done();
     }
 
-    private void ToggleForms()
-    {
-        this.showDropdown = !this.showDropdown;
-        if (this.showDropdown)
-        {
-            this.FirstTabActive = "active";
-            this.SecondTabActive = "";
-        }
-        else
-        {
-            this.FirstTabActive = "";
-            this.SecondTabActive = "active";
-        }
-    }
-
-    private async Task<bool> SelectSubjectServiveValidate()
-        => await this.subjectService.CheckIfSubjectExistsForGrade(this.subjectId.Id, this.gradeId);
+    private async Task<bool> SelectSubjectServiveValidate(int subjectId)
+        => await this.subjectService.CheckIfSubjectExistsForGrade(subjectId, this.gradeId);
 }

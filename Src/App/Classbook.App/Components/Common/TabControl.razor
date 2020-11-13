@@ -1,0 +1,53 @@
+﻿<ul class="nav nav-tabs">
+    @foreach (var tabPage in this.pages)
+    {
+        <li class="nav-item">
+            <a class="nav-link @this.GetButtonClass(tabPage)" @onclick="@(() => this.ActivatePage(tabPage))">@tabPage.ButtonText</a>
+        </li>
+    }
+</ul>
+
+<CascadingValue Value="this">
+    <div class="mt-3">
+        @this.ChildContent
+    </div>
+</CascadingValue>
+
+@code {
+    [Parameter]
+    public RenderFragment ChildContent { get; set; }
+
+    public TabPage ActivePage;
+
+    private List<TabPage> pages;
+
+    protected override void OnInitialized()
+    {
+        this.pages = new List<TabPage>();
+
+        base.OnInitialized();
+    }
+
+    public void AddPage(TabPage page)
+    {
+        this.pages.Add(page);
+
+        if (this.pages.Count == 1)
+        {
+            this.ActivePage = page;
+        }
+
+        this.StateHasChanged();
+    }
+
+    private string GetButtonClass(TabPage tabPage)
+    {
+        return tabPage == this.ActivePage ? "active" : "";
+    }
+
+    private void ActivatePage(TabPage tabPage)
+    {
+        this.ActivePage = tabPage;
+        this.StateHasChanged();
+    }
+}

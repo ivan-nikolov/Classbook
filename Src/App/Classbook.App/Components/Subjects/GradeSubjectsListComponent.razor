@@ -36,7 +36,7 @@ else
 
     protected async override Task OnInitializedAsync()
     {
-        this.subjects = (await this.subjectService.GetByGradeIdAsync<GradeSubjectViewModel>(this.GradeId)).ToList();
+        await this.GetSubjects();
 
         await base.OnInitializedAsync();
     }
@@ -66,7 +66,7 @@ else
     {
         if (!modalResult.Cancelled)
         {
-            this.subjects = (await this.subjectService.GetByGradeIdAsync<GradeSubjectViewModel>(this.GradeId)).ToList();
+            await this.GetSubjects();
             this.StateHasChanged();
             this.toastService.ShowSuccess(SubjectAddedSuccessfulyMessage);
         }
@@ -85,5 +85,10 @@ else
             this.toastService.ShowSuccess(RemoveGradeSuccessMessage);
             this.StateHasChanged();
         }
+    }
+
+    private async Task GetSubjects()
+    {
+        this.subjects = (await this.subjectService.GetByGradeIdAsync<GradeSubjectViewModel>(this.GradeId)).ToList();
     }
 }

@@ -1,0 +1,81 @@
+﻿@inject IModalService modalService;
+@inject IToastService toastService;
+@inject Classbook.Services.Data.IGradeClassService gradeClassService;
+@using Classbook.App.Models.GradeClasses;
+
+<h2>Паралелки:</h2>
+
+@if (this.classes == null)
+{
+    <Loader></Loader>
+}
+else
+{
+
+    if (this.classes.Count() == 0)
+    {
+        <p>Няма добавени паралелки за текущия клас.</p>
+    }
+    else
+    {
+        <ul class="list-group list-group-horizontal d-flex" style="list-style-type:none;">
+            @foreach (var gradeClass in this.classes)
+            {
+                <li><a class="btn btn-sm btn-outline-primary list-group-item mr-1" href="/grades/details/@gradeClass.Id">@gradeClass.Name</a></li>
+            }
+        </ul>
+    }
+    <button class="btn btn-outline-info" @onclick="@(() => this.ShowAddGradeClassModal())">
+        Добави Паралелка
+    </button>
+}
+
+@code {
+    private List<GradeClassViewModel> classes;
+
+    [CascadingParameter]
+    public int GradeId { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        await this.GetClasses();
+
+        await base.OnInitializedAsync();
+    }
+
+    private async Task GetClasses()
+    {
+        this.classes = (await this.gradeClassService.GetAllByGradeIdAsync<GradeClassViewModel>(this.GradeId)).ToList();
+    }
+
+    private void ShowAddGradeClassModal()
+    {
+        var parameters = new ModalParameters();
+        parameters.Add("FormId", 1);
+        parameters.Add("gradeId", this.GradeId);
+        var options = new ModalOptions()
+        {
+            Position = "blazored-modal-topleft",
+        };
+
+        this.modalService.OnClose += this.AddGradeClassModalClosed;
+        this.modalService.OnClose += this.UpdateSubjects;
+        this.modalService.Show<AddGradeClassToGradeComponent>("Добавяне на паралелка", parameters, options);
+    }
+
+    private void AddGradeClassModalClosed(object sender, ModalResult modalResult)
+    {
+        this.modalService.OnClose -= this.AddGradeClassModalClosed;
+        this.modalService.OnClose -= this.UpdateSubjects;
+    }
+
+    private async void UpdateSubjects(object sender, ModalResult modalResult = null)
+    {
+        if (!modalResult.Cancelled)
+        {
+            await this.GetClasses();
+            this.StateHasChanged();
+            this.toastService.ShowSuccess("");
+        }
+    }
+}
