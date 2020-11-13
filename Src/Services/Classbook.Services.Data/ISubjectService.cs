@@ -28,5 +28,7 @@
         Task<IEnumerable<T>> GetByGradeIdAsync<T>(int gradeId);
 
         IEnumerable<T> GetAll<T>(Func<T, bool> expression = null);
+
+        Task RemoveGradeAsync(int id, int gradeId);
     }
 }

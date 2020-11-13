@@ -1,8 +1,5 @@
 ﻿namespace Classbook.App.Models.Grades
 {
-    using System.Collections.Generic;
-
-    using Classbook.App.Models.Subjects;
     using Classbook.Data.Models;
 
     using Classook.Services.Mapping;

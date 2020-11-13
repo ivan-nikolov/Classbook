@@ -1,6 +1,7 @@
 ﻿@inject IModalService modalService;
 @inject IToastService toastService;
 @inject Classbook.Services.Data.ISubjectService subjectService;
+@inject Classbook.Services.Data.IGradeService gradeService;
 @using Classbook.App.Models.Subjects;
 @using static Classbook.Common.Messages.SubjectMessages;
 
@@ -12,10 +13,18 @@
 }
 else
 {
-    foreach (var subject in this.subjects)
-    {
-        <p>@subject.Name</p>
-    }
+    <table>
+        <tbody>
+            @foreach (var subject in this.subjects)
+            {
+            <tr>
+                <td class="col-4">@subject.Name</td>
+                <td class="col-3"><button class="btn btn-outline-danger" @onclick="@(() => this.RemoveSubject(subject.Id))">Премахни</button></td>
+            </tr>
+            }
+        </tbody>
+    </table>
+    
 }
 <button class="btn btn-outline-info mr-2" @onclick="@(() => this.ShowAddSubjectModal(this.GradeId))">Добави предмет</button>
 @code {
@@ -60,6 +69,21 @@ else
             this.subjects = (await this.subjectService.GetByGradeIdAsync<GradeSubjectViewModel>(this.GradeId)).ToList();
             this.StateHasChanged();
             this.toastService.ShowSuccess(SubjectAddedSuccessfulyMessage);
+        }
+    }
+
+    private async Task RemoveSubject(int id)
+    {
+        if (!await this.subjectService.CheckIfSubjectExistsForGrade(id, this.GradeId))
+        {
+            this.toastService.ShowError(RemoveGradeErrorMessage);
+        }
+        else
+        {
+            await this.subjectService.RemoveGradeAsync(id, this.GradeId);
+            this.subjects.Remove(this.subjects.FirstOrDefault(s => s.Id == id));
+            this.toastService.ShowSuccess(RemoveGradeSuccessMessage);
+            this.StateHasChanged();
         }
     }
 }

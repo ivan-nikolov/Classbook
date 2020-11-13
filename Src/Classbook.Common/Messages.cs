@@ -14,6 +14,10 @@
             public const string CreatedSuccessfulyMessage = "Предметът е създаден успешно.";
 
             public const string DeletedSuccessfulyMessage = "Предметът е изтрит успешно.";
+
+            public const string RemoveGradeErrorMessage = "Предметът не е добавен към избрания клас.";
+
+            public const string RemoveGradeSuccessMessage = "Предметът е премахнат успешно от избрания клас.";
         }
     }
 }

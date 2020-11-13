@@ -95,10 +95,6 @@
 
             return subjects.ToList();
         }
-            //=> await this.context.Subjects
-            //.Where(s => s.IsDeleted == false)
-            //.To<T>()
-            //.ToListAsync();
 
         public async Task<IEnumerable<T>> GetByGradeIdAsync<T>(int gradeId)
             => await this.context.Subjects
@@ -111,5 +107,13 @@
             .Where(s => s.Id == id)
             .To<T>()
             .FirstOrDefaultAsync();
+
+        public async Task RemoveGradeAsync(int id, int gradeId)
+        {
+            var gradeSubject = await this.context.GradeSubjects.FirstOrDefaultAsync(gs => gs.SubjectId == id && gs.GradeId == gradeId);
+
+            this.context.GradeSubjects.Remove(gradeSubject);
+            await this.context.SaveChangesAsync();
+        }
     }
 }
